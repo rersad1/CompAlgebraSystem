@@ -1,11 +1,10 @@
 from classes import *
 
 class NaturalOperations:
-    """
-    N-1 Разрабатывал:
-    """
+
+    #N-1 Разработчик:Басик.В
     @staticmethod
-    def COM_NN_D(num1: Natural, num2: Natural) -> int:
+    def COM_NN_D(num1: Natural, num2: Natural) -> int: #works
         """
         Сравнение двух натуральных чисел.
         Возвращает:
@@ -27,6 +26,7 @@ class NaturalOperations:
                     return 1
             return 0
 
+    #N-2 Разработчик:Басик.В
     @staticmethod
     def NZER_N_B(num: Natural) -> str: #works
         """
@@ -36,6 +36,7 @@ class NaturalOperations:
             return "нет"
         return "да"
 
+    # N-3 Разработчик:Глебова.В
     @staticmethod
     def ADD_1N_N(num: Natural) -> Natural: #works
         """
@@ -60,6 +61,8 @@ class NaturalOperations:
         result_digits.reverse()  # возвращаем порядок цифр в нормальное состояние
         return Natural(''.join(map(str, result_digits)))
 
+    # N-4 Разработчик:Потапов.Р
+    @staticmethod
     def ADD_NN_N(num1: Natural, num2: Natural) -> Natural:
         """
         Сложение двух натуральных чисел.
@@ -85,6 +88,7 @@ class NaturalOperations:
         result_digits.reverse()
         return Natural(''.join(map(str, result_digits)))
 
+    # N-5 Разработчик:Глебова.В
     @staticmethod
     def SUB_NN_N(num1: Natural, num2: Natural) -> Natural: #works
         """
@@ -122,8 +126,7 @@ class NaturalOperations:
         result_digits.reverse()
         return Natural(''.join(map(str, result_digits)))
 
-
-
+    # N-6 Разработчик:Джаватова.З
     @staticmethod
     def MUL_ND_N(num: Natural, digit: int) -> Natural:
         """
@@ -149,6 +152,7 @@ class NaturalOperations:
         result_digits.reverse()
         return Natural(''.join(map(str, result_digits)))
 
+    # N-7 Разработчик:Тимошук.Е
     @staticmethod
     def MUL_Nk_N(num: Natural, k: int) -> Natural:
         """
@@ -161,6 +165,7 @@ class NaturalOperations:
         result_digits = num.digits + [0] * k
         return Natural(''.join(map(str, result_digits)))
 
+    # N-8 Разработчик:Тимошук.Е
     @staticmethod
     def MUL_NN_N(num1: Natural, num2: Natural) -> Natural:
         """
@@ -177,23 +182,26 @@ class NaturalOperations:
 
         return result
 
+    # N-9 Разработчик:Раутио.И
     @staticmethod
     def SUB_NDN_N(num1: Natural, num2: Natural, digit: int) -> Natural:
         """
-        Вычитание из натурального числа num1 числа, полученного умножением num2 на digit.
-        Предполагаем, что результат неотрицательный.
+        Вычитает из первого натурального числа результат умножения второго натурального числа на цифру.
         """
-        # Умножаем num2 на digit
+        if digit < 0 or digit > 9:
+            raise ValueError("Цифра должна быть в пределах от 0 до 9.")
+
+        # Умножаем второе число на цифру
         temp = NaturalOperations.MUL_ND_N(num2, digit)
 
-        # Сравниваем num1 и temp для проверки, что вычитание возможно.
-        if NaturalOperations.COM_NN_D(num1, temp) == 1:  # Если num1 < temp, то вычитание невозможно.
+        # Проверяем, что результат вычитания не будет отрицательным
+        if NaturalOperations.COM_NN_D(num1, temp) < 0:
             raise ValueError("Результат вычитания будет отрицательным.")
 
-        # Вычитаем temp из num1
-        result = NaturalOperations.SUB_NN_N(num1, temp)
-        return result
+        # Выполняем вычитание
+        return NaturalOperations.SUB_NN_N(num1, temp)
 
+    # N-10 Разработчик:Джаватова.З
     @staticmethod
     def DIV_NN_Dk(num1: Natural, num2: Natural, k: int) -> int:
         """
@@ -217,89 +225,104 @@ class NaturalOperations:
 
         return first_digit
 
+    # N-11 Разработчик:Раутио.И
     @staticmethod
     def DIV_NN_N(num1: Natural, num2: Natural) -> (Natural, Natural):
         """
-        Неполное частное от деления первого натурального числа на второе с остатком.
-        Предполагается, что делитель (num2) не равен нулю.
+        Деление первого натурального числа на второе с остатком.
         """
         if NaturalOperations.NZER_N_B(num2) == "нет":
             raise ValueError("Делитель не может быть нулём.")
 
-        quotient = Natural("0")  # Изначально частное равно нулю.
-        remainder = Natural(str(num1))  # Остаток изначально равен числу num1.
+        quotient = []  # Результат деления
+        remainder = Natural(str(num1))  # Остаток изначально равен делимому
 
+        # Начинаем деление "столбиком"
+        while NaturalOperations.COM_NN_D(remainder, num2) != 1:  # Пока остаток >= делителя
+            current_digit = 0
+            # Ищем, сколько раз делитель умещается в остатке
+            while NaturalOperations.COM_NN_D(remainder, num2) != 1:
+                remainder = NaturalOperations.SUB_NN_N(remainder, num2)
+                current_digit += 1
 
+            # Добавляем цифру в частное
+            quotient.append(current_digit)
 
-        # Пока остаток больше или равен делителю
-        while NaturalOperations.COM_NN_D(remainder, num2) != 1:
-            # Находим первую цифру частного с использованием DIV_NN_Dk
-            first_digit = NaturalOperations.DIV_NN_Dk(remainder, num2, 0)
-            # Добавляем эту цифру к частному
-            quotient = NaturalOperations.ADD_NN_N(quotient, Natural(str(first_digit)))
-            # Вычитаем из остатка num2, умноженное на первую цифру, с использованием SUB_NDN_N
-            remainder = NaturalOperations.SUB_NDN_N(remainder, num2, first_digit)
+            # Формируем результат
+        return Natural(''.join(map(str, quotient))), remainder
 
-        return quotient, remainder
+        # N-12 Разработчик:Березовсий.М
+        @staticmethod
+        def MOD_NN_N(num1: Natural, num2: Natural) -> Natural:
+            """
+            Вычисление остатка от деления первого натурального числа на второе.
+            Предполагается, что делитель (num2) не равен нулю.
+            """
+            if NaturalOperations.NZER_N_B(num2) == "нет":
+                raise ValueError("Делитель не может быть нулём.")
 
-    @staticmethod
-    def MOD_NN_N(num1: Natural, num2: Natural) -> Natural:
-        """
-        Вычисление остатка от деления первого натурального числа на второе.
-        Предполагается, что делитель (num2) не равен нулю.
-        """
-        if int(num2) == 0:
-            raise ValueError("Делитель не может быть нулём.")
+            # Проверяем, если num1 меньше num2, то остаток — это num1
+            if NaturalOperations.COM_NN_D(num1, num2) == 1:
+                return num1
 
-        # Находим неполное частное от деления
-        quotient, remainder = NaturalOperations.DIV_NN_N(num1, num2)
+            # Используем цикл для вычитания num2 до тех пор, пока num1 >= num2
+            remainder = num1
+            while NaturalOperations.COM_NN_D(remainder, num2) != 1:
+                # Находим первую цифру деления и вычитаем умноженное значение
+                digit = NaturalOperations.DIV_NN_Dk(remainder, num2, 0)
+                temp = NaturalOperations.MUL_ND_N(num2, digit)
+                remainder = NaturalOperations.SUB_NN_N(remainder, temp)
 
-        # Остаток от деления — это исходное число минус частное, умноженное на делитель
-        remainder = NaturalOperations.SUB_NDN_N(num1, num2, int(quotient))
+            return remainder
 
-        return remainder
+        # N-13 Разработчик:Тимошук.Е
+        @staticmethod
+        def GCF_NN_N(num1: Natural, num2: Natural) -> Natural:
+            """
+            Вычисление наибольшего общего делителя (НОД) двух натуральных чисел.
+            Используется алгоритм Евклида.
+            """
+            # Проверяем, не равен ли одно из чисел нулю
+            if NaturalOperations.NZER_N_B(num1) == "нет" or NaturalOperations.NZER_N_B(num2) == "нет":
+                raise ValueError("Число не может быть равно нулю.")
 
-    @staticmethod
-    def GCF_NN_N(num1: Natural, num2: Natural) -> Natural:
-        """
-        Вычисление наибольшего общего делителя (НОД) двух натуральных чисел.
-        Используется алгоритм Евклида.
-        """
-        # Проверяем, не равен ли одно из чисел нулю
-        if NaturalOperations.NZER_N_B(num1) == "нет" or NaturalOperations.NZER_N_B(num2) == "нет":
-            raise ValueError("Число не может быть равно нулю.")
+            while True:
+                # Проверяем, не нужно ли менять местами числа перед расчетом остатка
+                if NaturalOperations.COM_NN_D(num1, num2) < 0:
+                    num1, num2 = num2, num1
 
-        while True:
-            # Проверяем, не нужно ли менять местами числа перед расчетом остатка
-            if NaturalOperations.COM_NN_D(num1, num2) < 0:
-                num1, num2 = num2, num1
+                # Получаем остаток от деления
+                remainder = NaturalOperations.MOD_NN_N(num1, num2)
 
-            # Получаем остаток от деления
-            remainder = NaturalOperations.MOD_NN_N(num1, num2)
+                # Если остаток равен нулю, то возвращаем второе число как НОД
+                if NaturalOperations.COM_NN_D(remainder, Natural("0")) == 0:
+                    return num2
 
-            # Если остаток равен нулю, то возвращаем второе число как НОД
-            if NaturalOperations.COM_NN_D(remainder, Natural("0")) == 0:
-                return num2
+                # Если остаток не равен нулю, продолжаем с новым делителем
+                num1, num2 = num2, remainder
 
-            # Если остаток не равен нулю, продолжаем с новым делителем
-            num1, num2 = num2, remainder
+        # N-14 Разработчик:Тимошук.Е
+        @staticmethod
+        def LCM_NN_N(num1: Natural, num2: Natural) -> Natural:
+            """
+            Наименьшее общее кратное (НОК) двух чисел.
+            """
+            if NaturalOperations.NZER_N_B(num1) == "нет" or NaturalOperations.NZER_N_B(num2) == "нет":
+                raise ValueError("Число не может быть равно нулю.")
 
-    @staticmethod
-    def LCM_NN_N(num1: Natural, num2: Natural) -> Natural:
-        """
-        Вычисление наименьшего общего кратного (НОК) двух натуральных чисел.
-        Используется формула: LCM(a, b) = (a * b) / GCF(a, b)
-        """
-        if NaturalOperations.NZER_N_B(num1) == "нет" or NaturalOperations.NZER_N_B(num2) == "нет":
-            raise ValueError("Число не может быть равно нулю.")
+            # Находим НОД
+            gcf = NaturalOperations.GCF_NN_N(num1, num2)
+            print(f"НОД({num1}, {num2}) = {gcf}")
 
-        # Находим НОД чисел
-        gcf = NaturalOperations.GCF_NN_N(num1, num2)
+            # Умножаем числа
+            product = NaturalOperations.MUL_NN_N(num1, num2)
+            print(f"Произведение {num1} * {num2} = {product}")
 
-        # Умножаем числа и делим на НОД для нахождения НОК
-        product = NaturalOperations.MUL_NN_N(num1, num2)
-        lcm = NaturalOperations.DIV_NN_N(product, gcf)
+            # Проверяем деление произведения на НОД
+            quotient, remainder = NaturalOperations.DIV_NN_N(product, gcf)
+            print(f"Частное от деления произведения на НОД = {quotient}, остаток = {remainder}")
 
-        return lcm
+            if NaturalOperations.COM_NN_D(remainder, Natural("0")) != 0:
+                raise ValueError("Ошибка: произведение не делится на НОД без остатка.")
 
-
+            return quotient

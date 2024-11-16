@@ -2,6 +2,7 @@ from classes import *
 from operations.natural_operations import NaturalOperations
 class IntegerOperations:
 
+    #Z-1 Разработчик:Джаватова.З
     @staticmethod
     def ABS_Z_N(num: Integer) -> Natural:
         """
@@ -10,6 +11,7 @@ class IntegerOperations:
         digits_str = ''.join(map(str, num.get_digits()))  # Получаем строку из массива цифр.
         return Natural(digits_str)  # Создаем натуральное число.
 
+    # Z-2 Разработчик:Джаватова.З
     @staticmethod
     def POZ_Z_D(num: Integer) -> int:
         """
@@ -20,6 +22,7 @@ class IntegerOperations:
             return 0  # Число равно нулю.
         return 1 if num.get_sign() else 2  # 1 - отрицательное, 2 - положительное.
 
+    # Z-3 Разработчик:Глебова.В
     @staticmethod
     def MUL_ZM_Z(num: Integer) -> Integer:
         """
@@ -31,6 +34,7 @@ class IntegerOperations:
         new_number = ('-' if new_sign else '') + digits_str
         return Integer(new_number)
 
+    # Z-4 Разработчик:Потоцкий.С
     @staticmethod
     def TRANS_N_Z(num: Natural) -> Integer:
         """
@@ -39,6 +43,7 @@ class IntegerOperations:
         digits_str = ''.join(map(str, num.get_digits()))  # Получаем строку из цифр.
         return Integer(digits_str)  # Создаем положительное целое число.
 
+    # Z-5 Разработчик:Потапов.Р
     @staticmethod
     def TRANS_Z_N(num: Integer) -> Natural:
         """
@@ -49,6 +54,7 @@ class IntegerOperations:
         digits_str = ''.join(map(str, num.get_digits()))  # Получаем строку из цифр.
         return Natural(digits_str)  # Создаем натуральное число.
 
+    # Z-6 Разработчик:Басив.В
     @staticmethod
     def ADD_ZZ_Z(num1: Integer, num2: Integer) -> Integer:
         """
@@ -94,6 +100,7 @@ class IntegerOperations:
         result_number = ('-' if result_sign else '') + result_digits
         return Integer(result_number)
 
+    # Z-7 Разработчик:Глебова.В
     @staticmethod
     def SUB_ZZ_Z(num1: Integer, num2: Integer) -> Integer:
         """
@@ -145,6 +152,7 @@ class IntegerOperations:
 
         return result
 
+    # Z-8 Разработчик:Березовский.М
     @staticmethod
     def MUL_ZZ_Z(num1: Integer, num2: Integer) -> Integer:
         """
@@ -175,6 +183,7 @@ class IntegerOperations:
 
         return result
 
+    # Z-9 Разработчик:Потоцкий.С
     @staticmethod
     def DIV_ZZ_Z(num1: Integer, num2: Integer) -> Integer:
         """
@@ -207,6 +216,7 @@ class IntegerOperations:
 
         return quotient
 
+    # Z-10 Разработчик:Глебова.В
     @staticmethod
     def MOD_ZZ_Z(num1: Integer, num2: Integer) -> Integer:
         """

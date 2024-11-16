@@ -3,7 +3,7 @@ from operations.natural_operations import NaturalOperations
 from operations.integer_operations import IntegerOperations
 
 class RationalOperations:
-
+    # Q-1 Разработчик:Березовский.М
     @staticmethod
     def RED_Q_Q(fraction): # ??????
         """
@@ -25,6 +25,7 @@ class RationalOperations:
 
         return reduced_fraction
 
+    # Q-2 Разработчик:Басик.В
     @staticmethod
     def INT_Q_B(fraction: Rational) -> str: # проверено тестами работает
         """
@@ -47,6 +48,7 @@ class RationalOperations:
 
         return "нет"
 
+    # Q-3 Разработчик:Березовский.М
     @staticmethod
     def TRANS_Z_Q(integer: Integer) -> Rational: # протестировано
         """
@@ -58,6 +60,7 @@ class RationalOperations:
         # Создаем рациональное число с числителем равным целому числу и знаменателем равным 1
         return Rational(integer, Natural("1"))
 
+    # Q-4 Разработчик:Басик.В
     @staticmethod
     def TRANS_Q_Z(rational: Rational) -> Integer: # протестировано
         """
@@ -74,6 +77,7 @@ class RationalOperations:
         # Возвращаем числитель как целое число
         return rational.numerator
 
+    # Q-5 Разработчик:Джаватова.З
     @staticmethod
     def ADD_QQ_Q(fraction1: Rational, fraction2: Rational) -> Rational: #?????
         """
@@ -98,6 +102,7 @@ class RationalOperations:
         # Возвращаем результат как новую дробь с общим знаменателем
         return Rational(result_numerator, lcm_denominator)
 
+    # Q-6 Разработчик:Басик.В
     @staticmethod
     def SUB_QQ_Q(fraction1: Rational, fraction2: Rational) -> Rational: #????
         """
@@ -119,6 +124,7 @@ class RationalOperations:
         # Результат — дробь с общим знаменателем
         return Rational(new_numerator, lcm_denominator)
 
+    # Q-7 Разработчик:Глебова.В
     @staticmethod
     def MUL_QQ_Q(fraction1: Rational, fraction2: Rational) -> Rational: #????
         """
@@ -136,6 +142,7 @@ class RationalOperations:
         # Возвращаем результат в виде новой дроби
         return Rational(new_numerator, new_denominator)
 
+    # Q-8 Разработчик:Джаватова.З
     @staticmethod
     def DIV_QQ_Q(fraction1: Rational, fraction2: Rational) -> Rational: #???
         """
