@@ -1,9 +1,11 @@
 from classes import *
 
 class NaturalOperations:
-
+    """
+    N-1 Разрабатывал:
+    """
     @staticmethod
-    def COM_NN_D(num1: Natural, num2: Natural) -> int: #works
+    def COM_NN_D(num1: Natural, num2: Natural) -> int:
         """
         Сравнение двух натуральных чисел.
         Возвращает:
