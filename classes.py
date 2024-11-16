@@ -191,12 +191,15 @@ class Polynomial:
             term = term.lstrip('+')
             if 'x' in term:
                 coeff, _, degree = term.partition('x^')
-                coeff = coeff if coeff else "1"
+                # Проверяем коэффициент на наличие пустой строки или знаков "+", "-"
+                if coeff in ["", "+"]:  # Для случая "x^2" или "+x^2"
+                    coeff = "1"
+                elif coeff == "-":  # Для случая "-x^2"
+                    coeff = "-1"
                 degree = degree if degree else "1"
                 self.add_term(Natural(degree), Rational(Integer(coeff)))
             else:
                 self.add_term(Natural("0"), Rational(Integer(term)))
-
 
 def create_polynomial(input_str: str) -> Polynomial:
     """
@@ -208,3 +211,5 @@ def create_polynomial(input_str: str) -> Polynomial:
     poly = Polynomial()
     poly.build_from_string(input_str)
     return poly
+
+

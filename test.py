@@ -70,9 +70,9 @@ class TestNaturalOperations(unittest.TestCase):
 
     def test_MUL_NN_N(self):
         """Тестируем умножение двух чисел."""
-        # 12345 * 6789 = 83618105
+        # 12345 * 6789 = 83810205
         result = NaturalOperations.MUL_NN_N(self.num1, self.num2)
-        self.assertEqual(str(result), "83618105")
+        self.assertEqual(str(result), "83810205")
 
     def test_SUB_NDN_N(self):
         """Тестируем вычитание из числа, полученного умножением на цифру."""
@@ -85,7 +85,7 @@ class TestNaturalOperations(unittest.TestCase):
         num2 = Natural("12")
 
         k = 1
-        expected = 15
+        expected = 8
 
         result = NaturalOperations.DIV_NN_Dk(num1, num2, k)
         self.assertEqual(result, expected)
@@ -117,3 +117,6 @@ class TestNaturalOperations(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+

@@ -58,32 +58,29 @@ class NaturalOperations:
         result_digits.reverse()  # возвращаем порядок цифр в нормальное состояние
         return Natural(''.join(map(str, result_digits)))
 
-    @staticmethod
     def ADD_NN_N(num1: Natural, num2: Natural) -> Natural:
         """
         Сложение двух натуральных чисел.
-        Используется операция сравнения для сложения столбиком.
         """
-        result_digits = []
         carry = 0
+        result_digits = []
 
-        # Сравниваем длины чисел и дополняем нулями
-        comparison = NaturalOperations.COM_NN_D(num1, num2)
-        if comparison == 1:
-            num1.digits = [0] * (len(num2.digits) - len(num1.digits)) + num1.digits
-        elif comparison == 2:
-            num2.digits = [0] * (len(num1.digits) - len(num2.digits)) + num2.digits
+        len1, len2 = len(num1.digits), len(num2.digits)
+        max_len = max(len1, len2)
 
-        # Складываем числа столбиком
-        for i in range(len(num1.digits)):
-            temp_sum = num1.digits[i] + num2.digits[i] + carry
-            result_digits.append(temp_sum % 10)
-            carry = temp_sum // 10
+        # Сложение по разрядам с учетом переноса
+        for i in range(max_len):
+            digit1 = num1.digits[len1 - i - 1] if i < len1 else 0
+            digit2 = num2.digits[len2 - i - 1] if i < len2 else 0
 
-        # Если есть переношение, добавляем его
+            total = digit1 + digit2 + carry
+            result_digits.append(total % 10)
+            carry = total // 10
+
         if carry:
             result_digits.append(carry)
 
+        result_digits.reverse()
         return Natural(''.join(map(str, result_digits)))
 
     @staticmethod
@@ -122,6 +119,8 @@ class NaturalOperations:
 
         result_digits.reverse()
         return Natural(''.join(map(str, result_digits)))
+
+
 
     @staticmethod
     def MUL_ND_N(num: Natural, digit: int) -> Natural:
@@ -194,21 +193,27 @@ class NaturalOperations:
         return result
 
     @staticmethod
-    def DIV_NN_Dk(num1: Natural, num2: Natural, k: int) -> int: #works
+    def DIV_NN_Dk(num1: Natural, num2: Natural, k: int) -> int:
         """
-        Вычисление первой цифры деления большего натурального числа на меньшее, умноженное на 10^k.
+        Вычисление первой цифры деления двух чисел,
+        домноженной на 10^k, где k — это номер позиции цифры.
         """
-        # Умножаем num2 на 10^k для сдвига позиции цифры
-        num2_shifted = NaturalOperations.MUL_Nk_N(num2, k)
 
-        # Сравниваем num1 и num2_shifted, чтобы определить первую цифру
-        quotient = 0
-        while NaturalOperations.COM_NN_D(num1, num2_shifted) != 1:
-            # Увеличиваем первую цифру деления
-            quotient += 1
-            num2_shifted = NaturalOperations.ADD_NN_N(num2_shifted, num2)
+        # Преобразуем числа в строковое представление для удобства работы
+        larger_digits = ''.join(map(str, num1.digits))
+        smaller_digits = ''.join(map(str, num2.digits))
 
-        return quotient
+        # Домножаем num2 на 10^k
+        num2_modified = NaturalOperations.MUL_Nk_N(num2, k)
+        modified_smaller_digits = ''.join(map(str, num2_modified.digits))
+
+        # Выполняем деление
+        quotient = int(larger_digits) // int(modified_smaller_digits)
+
+        # Извлекаем первую цифру от деления
+        first_digit = int(str(quotient)[0])
+
+        return first_digit
 
     @staticmethod
     def DIV_NN_N(num1: Natural, num2: Natural) -> (Natural, Natural):
@@ -221,6 +226,8 @@ class NaturalOperations:
 
         quotient = Natural("0")  # Изначально частное равно нулю.
         remainder = Natural(str(num1))  # Остаток изначально равен числу num1.
+
+
 
         # Пока остаток больше или равен делителю
         while NaturalOperations.COM_NN_D(remainder, num2) != 1:
@@ -292,4 +299,5 @@ class NaturalOperations:
         lcm = NaturalOperations.DIV_NN_N(product, gcf)
 
         return lcm
+
 
