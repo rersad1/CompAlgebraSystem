@@ -90,41 +90,41 @@ class NaturalOperations:
 
     # N-5 Разработчик:Глебова.В
     @staticmethod
-    def SUB_NN_N(num1: Natural, num2: Natural) -> Natural: #works
+    @staticmethod
+    def SUB_NN_N(num1: Natural, num2: Natural) -> Natural:
         """
         Вычитание из первого большего натурального числа второго меньшего или равного.
-        Используется операция сравнения для вычитания столбиком.
         """
-        # Сначала сравниваем два числа
-        comparison = NaturalOperations.COM_NN_D(num1, num2)
-        if comparison == 1:
+        # Проверяем, что num1 >= num2
+        if NaturalOperations.COM_NN_D(num1, num2) == 1:
             raise ValueError("Первое число должно быть больше или равно второму.")
+
+        # Если числа равны, возвращаем 0
+        if NaturalOperations.COM_NN_D(num1, num2) == 0:
+            return Natural("0")
 
         result_digits = []
         borrow = 0
 
-        # Дополняем нулями числа до одинаковой длины
-        if comparison == 1:
-            num1.digits = [0] * (len(num2.digits) - len(num1.digits)) + num1.digits
-        elif comparison == 2:
-            num2.digits = [0] * (len(num1.digits) - len(num2.digits)) + num2.digits
+        # Вычитаем поразрядно, начиная с младших разрядов
+        for i in range(1, len(num1.digits) + 1):
+            digit1 = num1.digits[-i]
+            digit2 = num2.digits[-i] if i <= len(num2.digits) else 0
 
-        # Вычитаем числа столбиком
-        for i in range(len(num1.digits) - 1, -1, -1):
-            temp_diff = num1.digits[i] - num2.digits[i] - borrow
-            if temp_diff < 0:
-                temp_diff += 10
+            diff = digit1 - digit2 - borrow
+            if diff < 0:
+                diff += 10
                 borrow = 1
             else:
                 borrow = 0
-            result_digits.append(temp_diff)
 
-        # Убираем ведущие нули
-        while len(result_digits) > 1 and result_digits[-1] == 0:
-            result_digits.pop()
+            result_digits.append(diff)
 
+        # Разворачиваем результат, убираем ведущие нули
         result_digits.reverse()
-        return Natural(''.join(map(str, result_digits)))
+        result_str = ''.join(map(str, result_digits)).lstrip("0")
+
+        return Natural(result_str or "0")  # Если строка пустая (все нули), вернуть "0"
 
     # N-6 Разработчик:Джаватова.З
     @staticmethod
@@ -154,14 +154,18 @@ class NaturalOperations:
 
     # N-7 Разработчик:Тимошук.Е
     @staticmethod
+    @staticmethod
     def MUL_Nk_N(num: Natural, k: int) -> Natural:
         """
-        Умножение натурального числа на 10^k, где k — натуральное число.
+        Умножение натурального числа на 10^k.
         """
         if k < 0:
             raise ValueError("k должно быть натуральным числом (неотрицательным).")
 
-        # Умножение на 10^k эквивалентно добавлению k нулей к числу
+        if k == 0:
+            return num
+
+        # Добавление k нулей в конце числа
         result_digits = num.digits + [0] * k
         return Natural(''.join(map(str, result_digits)))
 
@@ -170,12 +174,11 @@ class NaturalOperations:
     def MUL_NN_N(num1: Natural, num2: Natural) -> Natural:
         """
         Умножение двух натуральных чисел.
-        Используется умножение на цифру и умножение на 10^k.
         """
         result = Natural("0")  # Начальное значение результата - ноль.
 
-        for i in range(len(num2)):  # Перебираем цифры второго числа (num2).
-            digit = num2.digits[len(num2) - i - 1]  # Цифра из num2.
+        for i in range(len(num2.digits)):  # Перебираем цифры второго числа (num2).
+            digit = num2.digits[len(num2.digits) - i - 1]  # Цифра из num2.
             temp = NaturalOperations.MUL_ND_N(num1, digit)  # Умножаем num1 на цифру.
             temp = NaturalOperations.MUL_Nk_N(temp, i)  # Умножаем на 10^i (сдвигаем на разряд).
             result = NaturalOperations.ADD_NN_N(result, temp)  # Прибавляем результат к общему.
@@ -230,28 +233,40 @@ class NaturalOperations:
     def DIV_NN_N(num1: Natural, num2: Natural) -> (Natural, Natural):
         """
         Деление первого натурального числа на второе с остатком.
+        Возвращает частное и остаток.
         """
         if NaturalOperations.NZER_N_B(num2) == "нет":
             raise ValueError("Делитель не может быть нулём.")
 
-        quotient = []  # Результат деления
-        remainder = Natural(str(num1))  # Остаток изначально равен делимому
+        # Если num1 меньше num2, частное = 0, остаток = num1
+        if NaturalOperations.COM_NN_D(num1, num2) == 1:
+            return Natural("0"), num1
 
-        # Начинаем деление "столбиком"
-        while NaturalOperations.COM_NN_D(remainder, num2) != 1:  # Пока остаток >= делителя
+        quotient = []  # Список для хранения цифр частного
+        remainder = Natural("0")  # Текущий остаток
+
+        # Перебираем цифры num1 по разрядам
+        for digit in num1.digits:
+            # Увеличиваем остаток, добавляя текущую цифру
+            remainder = NaturalOperations.ADD_NN_N(
+                NaturalOperations.MUL_Nk_N(remainder, 1),  # Умножение на 10
+                Natural(str(digit))  # Добавляем цифру
+            )
+
+            # Считаем, сколько раз num2 помещается в текущем остатке
             current_digit = 0
-            # Ищем, сколько раз делитель умещается в остатке
-            while NaturalOperations.COM_NN_D(remainder, num2) != 1:
+            while NaturalOperations.COM_NN_D(remainder, num2) != 1:  # Пока остаток >= делителя
                 remainder = NaturalOperations.SUB_NN_N(remainder, num2)
                 current_digit += 1
 
-            # Добавляем цифру в частное
             quotient.append(current_digit)
 
-            # Формируем результат
-        return Natural(''.join(map(str, quotient))), remainder
+        # Формируем строку из цифр частного
+        quotient_natural = Natural(''.join(map(str, quotient)))
 
-    # N-12 Разработчик:Березовсий.М
+        return quotient_natural, remainder
+
+        # N-12 Разработчик:Березовсий.М
     @staticmethod
     def MOD_NN_N(num1: Natural, num2: Natural) -> Natural:
         """
@@ -298,31 +313,16 @@ class NaturalOperations:
             if NaturalOperations.COM_NN_D(remainder, Natural("0")) == 0:
                 return num2
 
-                # Если остаток не равен нулю, продолжаем с новым делителем
+            # Если остаток не равен нулю, продолжаем с новым делителем
             num1, num2 = num2, remainder
 
     # N-14 Разработчик:Тимошук.Е
     @staticmethod
     def LCM_NN_N(num1: Natural, num2: Natural) -> Natural:
         """
-        Наименьшее общее кратное (НОК) двух чисел.
+        Вычисление наименьшего общего кратного (НОК).
         """
-        if NaturalOperations.NZER_N_B(num1) == "нет" or NaturalOperations.NZER_N_B(num2) == "нет":
-            raise ValueError("Число не может быть равно нулю.")
-
-        # Находим НОД
         gcf = NaturalOperations.GCF_NN_N(num1, num2)
-        print(f"НОД({num1}, {num2}) = {gcf}")
-
-        # Умножаем числа
         product = NaturalOperations.MUL_NN_N(num1, num2)
-        print(f"Произведение {num1} * {num2} = {product}")
-
-        # Проверяем деление произведения на НОД
-        quotient, remainder = NaturalOperations.DIV_NN_N(product, gcf)
-        print(f"Частное от деления произведения на НОД = {quotient}, остаток = {remainder}")
-
-        if NaturalOperations.COM_NN_D(remainder, Natural("0")) != 0:
-            raise ValueError("Ошибка: произведение не делится на НОД без остатка.")
-
-        return quotient
+        lcm, _ = NaturalOperations.DIV_NN_N(product, gcf)
+        return lcm
