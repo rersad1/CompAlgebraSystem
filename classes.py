@@ -181,25 +181,35 @@ class Polynomial:
                 return
 
     def build_from_string(self, input_str: str):
-        """
-        Создает многочлен из входной строки.
-
-        :param input_str: Строка, представляющая многочлен.
-        """
         terms = re.split(r'(?=[+-])', input_str.replace(' ', '').replace('*', ''))
         for term in terms:
-            term = term.lstrip('+')
+            if not term:  # Пропускаем пустые члены
+                continue
+            term = term.lstrip('+')  # Убираем "+" в начале
+
             if 'x' in term:
-                coeff, _, degree = term.partition('x^')
-                # Проверяем коэффициент на наличие пустой строки или знаков "+", "-"
-                if coeff in ["", "+"]:  # Для случая "x^2" или "+x^2"
+                if '^' in term:
+                    coeff, _, degree = term.partition('x^')  # Разделяем коэффициент и степень
+                else:
+                    coeff, _, degree = term.partition('x')
+                    degree = "1"  # Если степень не указана, это "x^1"
+
+                if not coeff:  # Если коэффициент отсутствует, считаем "1"
                     coeff = "1"
-                elif coeff == "-":  # Для случая "-x^2"
+                elif coeff == "-":  # Если коэффициент "-", заменяем на "-1"
                     coeff = "-1"
-                degree = degree if degree else "1"
-                self.add_term(Natural(degree), Rational(Integer(coeff)))
             else:
-                self.add_term(Natural("0"), Rational(Integer(term)))
+                coeff = term  # Для свободного члена
+                degree = "0"
+
+            # Отладочный вывод
+            # print(f"Term: '{term}', Coefficient: '{coeff}', Degree: '{degree}'")
+
+            # Проверка перед вызовом Integer
+            if not coeff.isdigit() and not (coeff.startswith('-') and coeff[1:].isdigit()):
+                raise ValueError(f"Некорректный коэффициент: '{coeff}'")
+
+            self.add_term(Natural(degree), Rational(Integer(coeff)))
 
 def create_polynomial(input_str: str) -> Polynomial:
     """
@@ -212,4 +222,47 @@ def create_polynomial(input_str: str) -> Polynomial:
     poly.build_from_string(input_str)
     return poly
 
+
+# poly1 = create_polynomial("100x^243 - 30000x + 6789")
+# print(f"{poly1}")
+# poly2 = create_polynomial("x^3 - x + 2")
+# poly3 = create_polynomial("-2x^4 + 7")
+# print(f"Polynomial from '3x^2 + 4x - 5': {poly1}")
+# print(f"Polynomial from 'x^3 - x + 2': {poly2}")
+# print(f"Polynomial from '-2x^4 + 7': {poly3}")
+
+# def test_polynomial():
+#     print("=== Тестирование класса Polynomial ===")
+#
+#     try:
+#         # Тест создания многочлена из строки
+#         print("\nСоздание многочлена из строки: '3x^2 + 4x - 5'")
+#         poly1 = create_polynomial("3x^2 + 4x - 5")
+#         print(f"Многочлен 1: {poly1}")
+#
+#         # Тест добавления члена
+#         print("\nДобавление члена 2x^3 в многочлен")
+#         poly1.add_term(Natural("3"), Rational(Integer("2")))  # Добавляем 2x^3
+#         print(f"После добавления: {poly1}")
+#
+#         # Тест создания второго многочлена
+#         print("\nСоздание второго многочлена из строки: 'x^3 - x + 2'")
+#         poly2 = create_polynomial("x^3 - x + 2")
+#         print(f"Многочлен 2: {poly2}")
+#
+#         # Проверка строкового представления многочленов
+#         print("\nСтроковое представление многочленов:")
+#         print(f"Многочлен 1: {str(poly1)}")
+#         print(f"Многочлен 2: {str(poly2)}")
+#
+#         poly3 = create_polynomial("6")
+#         poly3.add_term(Natural("0"), Rational(Integer("4")))
+#         print(poly3)
+#
+#     except Exception as e:
+#         print(f"Ошибка при тестировании: {e}")
+#
+#
+# if __name__ == "__main__":
+#     test_polynomial()
 

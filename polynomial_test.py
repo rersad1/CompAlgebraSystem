@@ -13,19 +13,19 @@ class TestPolynomialOperations(unittest.TestCase):
         self.poly3 = Polynomial()
 
         # Добавление одночленов в poly1: 3x^2 + 2x + 1
-        self.poly1.add_term(Natural("2"), Rational(Integer("3"), Natural("1")))  # 3x^2
-        self.poly1.add_term(Natural("1"), Rational(Integer("2"), Natural("1")))  # 2x
-        self.poly1.add_term(Natural("0"), Rational(Integer("1"), Natural("1")))  # 1
+        self.poly1.add_term(Natural("2"), Rational(Integer("3")))  # 3x^2
+        self.poly1.add_term(Natural("1"), Rational(Integer("2")))  # 2x
+        self.poly1.add_term(Natural("0"), Rational(Integer("1")))  # 1
 
         # Добавление одночленов в poly2: 4x^2 + 3x + 2
-        self.poly2.add_term(Natural("2"), Rational(Integer("4"), Natural("1")))  # 4x^2
-        self.poly2.add_term(Natural("1"), Rational(Integer("3"), Natural("1")))  # 3x
-        self.poly2.add_term(Natural("0"), Rational(Integer("2"), Natural("1")))  # 2
+        self.poly2.add_term(Natural("2"), Rational(Integer("4")))  # 4x^2
+        self.poly2.add_term(Natural("1"), Rational(Integer("3")))  # 3x
+        self.poly2.add_term(Natural("0"), Rational(Integer("2")))  # 2
 
         # poly3: 5x^3 + 3x^2 + x
-        self.poly3.add_term(Natural("3"), Rational(Integer("5"), Natural("1")))  # 5x^3
-        self.poly3.add_term(Natural("2"), Rational(Integer("3"), Natural("1")))  # 3x^2
-        self.poly3.add_term(Natural("1"), Rational(Integer("1"), Natural("1")))  # x
+        self.poly3.add_term(Natural("3"), Rational(Integer("5")))  # 5x^3
+        self.poly3.add_term(Natural("2"), Rational(Integer("3")))  # 3x^2
+        self.poly3.add_term(Natural("1"), Rational(Integer("1")))  # x
 
     def test_add_polynomials(self):
         # Проверка сложения двух многочленов
@@ -33,9 +33,9 @@ class TestPolynomialOperations(unittest.TestCase):
 
         # Проверим полученный многочлен: (3x^2 + 2x + 1) + (4x^2 + 3x + 2) = 7x^2 + 5x + 3
         expected = Polynomial()
-        expected.add_term(Natural("2"), Rational(Integer("7"), Natural("1")))  # 7x^2
-        expected.add_term(Natural("1"), Rational(Integer("5"), Natural("1")))  # 5x
-        expected.add_term(Natural("0"), Rational(Integer("3"), Natural("1")))  # 3
+        expected.add_term(Natural("2"), Rational(Integer("7")))  # 7x^2
+        expected.add_term(Natural("1"), Rational(Integer("5")))  # 5x
+        expected.add_term(Natural("0"), Rational(Integer("3")))  # 3
 
         self.assertEqual(result, expected)
 
@@ -45,9 +45,9 @@ class TestPolynomialOperations(unittest.TestCase):
 
         # Проверим полученный многочлен: (3x^2 + 2x + 1) - (4x^2 + 3x + 2) = -x^2 - x - 1
         expected = Polynomial()
-        expected.add_term(Natural("2"), Rational(Integer("-1"), Natural("1")))  # -x^2
-        expected.add_term(Natural("1"), Rational(Integer("-1"), Natural("1")))  # -x
-        expected.add_term(Natural("0"), Rational(Integer("-1"), Natural("1")))  # -1
+        expected.add_term(Natural("2"), Rational(Integer("-1")))  # -x^2
+        expected.add_term(Natural("1"), Rational(Integer("-1")))  # -x
+        expected.add_term(Natural("0"), Rational(Integer("-1")))  # -1
 
         self.assertEqual(result, expected)
 
@@ -58,9 +58,9 @@ class TestPolynomialOperations(unittest.TestCase):
 
         # Ожидаем результат: 6x^2 + 4x + 2
         expected = Polynomial()
-        expected.add_term(Natural("2"), Rational(Integer("6"), Natural("1")))  # 6x^2
-        expected.add_term(Natural("1"), Rational(Integer("4"), Natural("1")))  # 4x
-        expected.add_term(Natural("0"), Rational(Integer("2"), Natural("1")))  # 2
+        expected.add_term(Natural("2"), Rational(Integer("6")))  # 6x^2
+        expected.add_term(Natural("1"), Rational(Integer("4")))  # 4x
+        expected.add_term(Natural("0"), Rational(Integer("2")))  # 2
 
         self.assertEqual(result, expected)
 
@@ -71,9 +71,9 @@ class TestPolynomialOperations(unittest.TestCase):
 
         # Ожидаем результат: 3x^4 + 2x^3 + x^2
         expected = Polynomial()
-        expected.add_term(Natural("4"), Rational(Integer("3"), Natural("1")))  # 3x^4
-        expected.add_term(Natural("3"), Rational(Integer("2"), Natural("1")))  # 2x^3
-        expected.add_term(Natural("2"), Rational(Integer("1"), Natural("1")))  # x^2
+        expected.add_term(Natural("4"), Rational(Integer("3")))  # 3x^4
+        expected.add_term(Natural("3"), Rational(Integer("2")))  # 2x^3
+        expected.add_term(Natural("2"), Rational(Integer("1")))  # x^2
 
         self.assertEqual(result, expected)
 
@@ -83,9 +83,9 @@ class TestPolynomialOperations(unittest.TestCase):
 
         # Ожидаем результат: x^2 + x + 1 (наибольший общий делитель)
         expected = Polynomial()
-        expected.add_term(Natural("2"), Rational(Integer("1"), Natural("1")))  # x^2
-        expected.add_term(Natural("1"), Rational(Integer("1"), Natural("1")))  # x
-        expected.add_term(Natural("0"), Rational(Integer("1"), Natural("1")))  # 1
+        expected.add_term(Natural("2"), Rational(Integer("1")))  # x^2
+        expected.add_term(Natural("1"), Rational(Integer("1")))  # x
+        expected.add_term(Natural("0"), Rational(Integer("1")))  # 1
 
         self.assertEqual(result, expected)
 
@@ -95,8 +95,8 @@ class TestPolynomialOperations(unittest.TestCase):
 
         # Ожидаем результат: 6x + 2
         expected = Polynomial()
-        expected.add_term(Natural("1"), Rational(Integer("6"), Natural("1")))  # 6x
-        expected.add_term(Natural("0"), Rational(Integer("2"), Natural("1")))  # 2
+        expected.add_term(Natural("1"), Rational(Integer("6")))  # 6x
+        expected.add_term(Natural("0"), Rational(Integer("2")))  # 2
 
         self.assertEqual(result, expected)
 
@@ -105,20 +105,20 @@ class TestPolynomialOperations(unittest.TestCase):
         dividend = Polynomial()
         divisor = Polynomial()
 
-        dividend.add_term(Natural("3"), Rational(Integer("5"), Natural("1")))  # 5x^3
-        dividend.add_term(Natural("2"), Rational(Integer("3"), Natural("1")))  # 3x^2
-        dividend.add_term(Natural("1"), Rational(Integer("1"), Natural("1")))  # x
+        dividend.add_term(Natural("3"), Rational(Integer("5")))  # 5x^3
+        dividend.add_term(Natural("2"), Rational(Integer("3")))  # 3x^2
+        dividend.add_term(Natural("1"), Rational(Integer("1")))  # x
 
-        divisor.add_term(Natural("2"), Rational(Integer("1"), Natural("1")))  # x^2
-        divisor.add_term(Natural("1"), Rational(Integer("2"), Natural("1")))  # 2x
-        divisor.add_term(Natural("0"), Rational(Integer("1"), Natural("1")))  # 1
+        divisor.add_term(Natural("2"), Rational(Integer("1")))  # x^2
+        divisor.add_term(Natural("1"), Rational(Integer("2")))  # 2x
+        divisor.add_term(Natural("0"), Rational(Integer("1")))  # 1
 
         quotient, remainder = PolynomialOperations.DIV_PP_P(dividend, divisor)
 
         # Ожидаем частное: 5x + 7, остаток: 0
         expected_quotient = Polynomial()
-        expected_quotient.add_term(Natural("1"), Rational(Integer("5"), Natural("1")))  # 5x
-        expected_quotient.add_term(Natural("0"), Rational(Integer("7"), Natural("1")))  # 7
+        expected_quotient.add_term(Natural("1"), Rational(Integer("5")))  # 5x
+        expected_quotient.add_term(Natural("0"), Rational(Integer("7")))  # 7
 
         expected_remainder = Polynomial()  # Остаток 0
 

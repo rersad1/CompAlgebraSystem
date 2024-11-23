@@ -105,22 +105,22 @@ class AlgebraSystemApp(tk.Tk):
 
     def on_execute(self):
         selected_module = self.module_listbox.get(tk.ACTIVE)
-        if selected_module:
-            # Получаем выбранную функцию
-            module_function = self.categories[self.category_combobox.get()][selected_module]
-
-            # Чтение введенных данных
-            inputs_text = self.input_entry.get()
-            if inputs_text:
-                try:
-                    inputs = [float(x.strip()) for x in inputs_text.split(",")]
-                    execute_module(module_function, inputs)
-                except ValueError:
-                    messagebox.showwarning("Ошибка", "Введите данные в правильном формате (через запятую).")
-            else:
-                messagebox.showwarning("Ошибка", "Введите данные для функции.")
-        else:
-            messagebox.showwarning("Ошибка", "Выберите модуль для выполнения.")
+        # if selected_module:
+        #     # Получаем выбранную функцию
+        #     module_function = self.categories[self.category_combobox.get()][selected_module]
+        #
+        #     # Чтение введенных данных
+        #     inputs_text = self.input_entry.get()
+        #     if inputs_text:
+        #         try:
+        #             inputs = [float(x.strip()) for x in inputs_text.split(",")]
+        #             execute_module(module_function, inputs)
+        #         except ValueError:
+        #             messagebox.showwarning("Ошибка", "Введите данные в правильном формате (через запятую).")
+        #     else:
+        #         messagebox.showwarning("Ошибка", "Введите данные для функции.")
+        # else:
+        #     messagebox.showwarning("Ошибка", "Выберите модуль для выполнения.")
 
 # Запуск приложения
 if __name__ == "__main__":
