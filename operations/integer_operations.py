@@ -165,20 +165,15 @@ class IntegerOperations:
         poz_num1 = IntegerOperations.POZ_Z_D(num1)  # Знак первого числа
         poz_num2 = IntegerOperations.POZ_Z_D(num2)  # Знак второго числа
 
-        # Преобразуем оба числа в натуральные (абсолютные значения)
-        abs_num1 = IntegerOperations.ABS_Z_N(num1)  # Абсолютное значение первого числа
-        abs_num2 = IntegerOperations.ABS_Z_N(num2)  # Абсолютное значение второго числа
-
-        # Умножаем натуральные числа через MUL_NN_N
+        # Умножаем абсолютные значения чисел
+        abs_num1 = IntegerOperations.ABS_Z_N(num1)
+        abs_num2 = IntegerOperations.ABS_Z_N(num2)
         result_abs = NaturalOperations.MUL_NN_N(abs_num1, abs_num2)
 
         # Определяем знак результата
-        # Числа имеют разные знаки, если один знак отрицательный
-        if (poz_num1 == 1 and poz_num2 == 0) or (poz_num1 == 0 and poz_num2 == 1):
-            # Результат отрицательный, меняем знак через MUL_ZM_Z
+        if (poz_num1 == 1 and poz_num2 == 2) or (poz_num1 == 2 and poz_num2 == 1):
             result = IntegerOperations.MUL_ZM_Z(Integer(str(result_abs)))
         else:
-            # Результат положительный
             result = Integer(str(result_abs))
 
         return result
@@ -201,7 +196,7 @@ class IntegerOperations:
         abs_num2 = IntegerOperations.ABS_Z_N(num2)  # Абсолютное значение делителя
 
         # Выполняем деление абсолютных значений как натуральных чисел
-        quotient_abs = NaturalOperations.DIV_NN_N(abs_num1, abs_num2)
+        quotient_abs, _ = NaturalOperations.DIV_NN_N(abs_num1, abs_num2)  # Получаем только частное
 
         # Определяем знак результата
         poz_num1 = IntegerOperations.POZ_Z_D(num1)  # Знак делимого
@@ -243,7 +238,6 @@ class IntegerOperations:
             remainder = IntegerOperations.MUL_ZM_Z(remainder)  # Меняем знак
 
         return remainder
-
 
 
 
