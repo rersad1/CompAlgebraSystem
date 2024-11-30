@@ -113,7 +113,7 @@ class TestNaturalOperations(unittest.TestCase):
         """Тестируем наименьшее общее кратное."""
         # НОК(12345, 6789)
         result = NaturalOperations.LCM_NN_N(self.num1, self.num2)
-        self.assertEqual(str(result), "83886015")
+        self.assertEqual(str(result), "27936735")
 
 if __name__ == "__main__":
     unittest.main()

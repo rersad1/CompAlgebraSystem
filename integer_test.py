@@ -107,7 +107,7 @@ class TestIntegerOperations(unittest.TestCase):
         num1 = Integer("456")
         num2 = Integer("123")
         result = IntegerOperations.MOD_ZZ_Z(num1, num2)
-        self.assertEqual(result.get_digits(), [0])  # Ожидаемый результат: 456 % 123 = 0
+        self.assertEqual(result.get_digits(), [8,7])  # Ожидаемый результат: 456 % 123 = 0
         self.assertFalse(result.get_sign())  # Результат положительный
 
 if __name__ == "__main__":
