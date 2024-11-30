@@ -1,9 +1,10 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, simpledialog
 from operations.natural_operations import NaturalOperations
 from operations.integer_operations import IntegerOperations
 from operations.rational_operations import RationalOperations
 from operations.polynomial_operation import PolynomialOperations
+from classes import *
 
 # Функция обработки выбора модуля
 def execute_module(module_name):
@@ -15,7 +16,7 @@ class AlgebraSystemApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Система компьютерной алгебры")
-        self.geometry("800x600")
+        self.geometry("900x800")
 
         # Категории и модули
         self.categories = {
@@ -78,7 +79,7 @@ class AlgebraSystemApp(tk.Tk):
         self.create_widgets()
 
     def create_widgets(self):
-        # Создание выпадающего списка категорий
+        # Категория
         self.category_label = tk.Label(self, text="Выберите категорию:")
         self.category_label.pack(pady=10)
 
@@ -86,16 +87,34 @@ class AlgebraSystemApp(tk.Tk):
         self.category_combobox.pack(pady=10)
         self.category_combobox.bind("<<ComboboxSelected>>", self.on_category_selected)
 
-        # Список модулей
+        # Модули
         self.module_label = tk.Label(self, text="Модули:")
         self.module_label.pack(pady=10)
 
         self.module_listbox = tk.Listbox(self, height=15)
         self.module_listbox.pack(pady=10, fill=tk.BOTH, expand=True)
 
-        # Кнопка для выполнения модуля
+        # Поле ввода данных
+        self.input_label = tk.Label(self, text="Введите аргументы через запятую:")
+        self.input_label.pack(pady=10)
+
+        self.input_entry = tk.Entry(self)
+        self.input_entry.pack(pady=10, fill=tk.X, expand=True)
+
+        # Кнопка выполнения
         self.execute_button = tk.Button(self, text="Выполнить", command=self.on_execute)
         self.execute_button.pack(pady=10)
+
+        # Индикатор выполнения
+        self.progress = ttk.Progressbar(self, mode="indeterminate")
+        self.progress.pack(pady=10)
+
+        # Поле вывода результата
+        self.result_label = tk.Label(self, text="Результат:")
+        self.result_label.pack(pady=10)
+
+        self.result_text = tk.Text(self, height=10, state="disabled")
+        self.result_text.pack(pady=10, fill=tk.BOTH, expand=True)
 
     def on_category_selected(self, event):
         category = self.category_combobox.get()
@@ -104,23 +123,73 @@ class AlgebraSystemApp(tk.Tk):
             self.module_listbox.insert(tk.END, module)
 
     def on_execute(self):
+        # Запуск индикатора выполнения
+        self.progress.start()
+        self.after(100, self.run_execution)  # Отложенный запуск выполнения
+
+    def run_execution(self):
+        # Получение выбранной категории и модуля
+        selected_category = self.category_combobox.get()
         selected_module = self.module_listbox.get(tk.ACTIVE)
-        # if selected_module:
-        #     # Получаем выбранную функцию
-        #     module_function = self.categories[self.category_combobox.get()][selected_module]
-        #
-        #     # Чтение введенных данных
-        #     inputs_text = self.input_entry.get()
-        #     if inputs_text:
-        #         try:
-        #             inputs = [float(x.strip()) for x in inputs_text.split(",")]
-        #             execute_module(module_function, inputs)
-        #         except ValueError:
-        #             messagebox.showwarning("Ошибка", "Введите данные в правильном формате (через запятую).")
-        #     else:
-        #         messagebox.showwarning("Ошибка", "Введите данные для функции.")
-        # else:
-        #     messagebox.showwarning("Ошибка", "Выберите модуль для выполнения.")
+
+        if not selected_category or not selected_module:
+            messagebox.showwarning("Ошибка", "Выберите категорию и модуль для выполнения.")
+            return
+
+        # Получаем выбранную функцию
+        module_function = self.categories[selected_category][selected_module]
+
+        # Логика обработки в зависимости от категории
+        if selected_category == "Натуральные числа с нулем":
+            self.process_natural_number(module_function)
+        elif selected_category == "Целые числа":
+            self.process_integer_number(module_function)
+        else:
+            messagebox.showwarning("Ошибка", "Неподдерживаемая категория.")
+
+        self.progress.stop()
+
+    def process_natural_number(self, module_function):
+        # Окно для ввода данных
+        input_data = self.input_entry.get().strip()
+        if not input_data:
+            messagebox.showwarning("Ошибка", "Данные не введены.")
+            return
+
+        try:
+            # Преобразуем данные в натуральные числа
+            inputs = [Natural(x.strip()) for x in input_data.split(",") if int(x.strip()) >= 0]
+            result = module_function(*inputs)
+
+            self.result_text.config(state="normal")
+            self.result_text.delete("1.0", tk.END)
+            if isinstance(result, (list, tuple)):
+                result = ", ".join(map(str, result))
+            self.result_text.insert(tk.END, f"Результат: {result}")
+            self.result_text.config(state="disabled")
+        except ValueError:
+            messagebox.showwarning("Ошибка", "Некорректный формат данных. Введите натуральные числа.")
+
+    def process_integer_number(self, module_function):
+        input_data = self.input_entry.get().strip()
+        if not input_data:
+            messagebox.showwarning("Ошибка", "Данные не введены.")
+            return
+
+        try:
+            # Преобразуем данные в целые числа
+            inputs = [Integer(x.strip()) for x in input_data.split(",")]
+            result = module_function(*inputs)
+
+            self.result_text.config(state="normal")
+            self.result_text.delete("1.0", tk.END)
+            if isinstance(result, (list, tuple)):
+                result = ", ".join(map(str, result))
+            self.result_text.insert(tk.END, f"Результат: {result}")
+            self.result_text.config(state="disabled")
+        except ValueError:
+            messagebox.showwarning("Ошибка", "Некорректный формат данных. Введите целые числа.")
+
 
 # Запуск приложения
 if __name__ == "__main__":
