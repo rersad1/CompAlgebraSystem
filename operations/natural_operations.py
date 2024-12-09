@@ -268,7 +268,7 @@ class NaturalOperations:
         # Формируем строку из цифр частного
         quotient_natural = Natural(''.join(map(str, quotient)))  # Преобразуем цифры в строку и в объект Natural
 
-        return quotient_natural, remainder  # Возвращаем частное и остаток
+        return quotient_natural  # Возвращаем частное и остаток
 
     # N-12 Разработчик: Березовсий.М
     @staticmethod
@@ -329,5 +329,5 @@ class NaturalOperations:
         """
         gcf = NaturalOperations.GCF_NN_N(num1, num2)  # Находим НОД
         product = NaturalOperations.MUL_NN_N(num1, num2)  # Умножаем оба числа
-        lcm, _ = NaturalOperations.DIV_NN_N(product, gcf)  # Делим произведение на НОД, чтобы получить НОК
-        return lcm  # Возвращаем НОК
+        lcm = NaturalOperations.DIV_NN_N(product, gcf)  # Делим произведение на НОД, чтобы получить НОК
+        return  lcm  # Возвращаем НОК

@@ -3,9 +3,9 @@ from operations.natural_operations import NaturalOperations
 from operations.integer_operations import IntegerOperations
 
 class RationalOperations:
-    # Q-1 Разработчик:Березовский.М
+    # Q-1 Разработчик:Березовский.М ПОФИКСИТЬЬ
     @staticmethod
-    def RED_Q_Q(fraction): # ??????
+    def RED_Q_Q(fraction):
         """
         Сокращение дроби.
         """
@@ -24,7 +24,6 @@ class RationalOperations:
         reduced_fraction = Rational(Integer(str(reduced_numerator)), reduced_denominator)
 
         return reduced_fraction
-
     # Q-2 Разработчик:Басик.В
     @staticmethod
     def INT_Q_B(fraction: Rational) -> str: # проверено тестами работает
@@ -82,7 +81,6 @@ class RationalOperations:
     def ADD_QQ_Q(fraction1: Rational, fraction2: Rational) -> Rational: #?????
         """
         Сложение двух дробей.
-
         :param fraction1: Первая дробь (Rational).
         :param fraction2: Вторая дробь (Rational).
         :return: Сумма двух дробей (Rational).
@@ -95,7 +93,7 @@ class RationalOperations:
             str(int(lcm_denominator) // int(fraction1.denominator))))
         new_numerator2 = IntegerOperations.MUL_ZZ_Z(fraction2.numerator, Integer(
             str(int(lcm_denominator) // int(fraction2.denominator))))
-
+        
         # Складываем числители
         result_numerator = IntegerOperations.ADD_ZZ_Z(new_numerator1, new_numerator2)
 
@@ -111,18 +109,30 @@ class RationalOperations:
 
         :return: результат вычитания в виде новой рациональной дроби.
         """
+
+        if fraction1.denominator == fraction2.denominator:
+            new_numerator = IntegerOperations.SUB_ZZ_Z(fraction1.numerator, fraction2.numerator)
+            answer = RationalOperations.RED_Q_Q(Rational(new_numerator, fraction1.denominator))
+            return answer
+        
         # Находим НСК (наименьшее общее кратное) знаменателей
         lcm_denominator = NaturalOperations.LCM_NN_N(fraction1.denominator, fraction2.denominator)
 
+        # Находим коэффициент для числителей
+        quotient1 = NaturalOperations.DIV_NN_N(lcm_denominator, fraction1.denominator)
+        quotient2 = NaturalOperations.DIV_NN_N(lcm_denominator, fraction2.denominator)
+
         # Приводим обе дроби к общему знаменателю
-        new_numerator1 = IntegerOperations.MUL_ZZ_Z(fraction1.numerator, lcm_denominator // fraction1.denominator)
-        new_numerator2 = IntegerOperations.MUL_ZZ_Z(fraction2.numerator, lcm_denominator // fraction2.denominator)
+        new_numerator1 = IntegerOperations.MUL_ZZ_Z(Integer(str(fraction1.numerator)), Integer(str(quotient1)))
+        new_numerator2 = IntegerOperations.MUL_ZZ_Z(Integer(str(fraction2.numerator)), Integer(str(quotient2)))
 
         # Вычитаем числители
         new_numerator = IntegerOperations.SUB_ZZ_Z(new_numerator1, new_numerator2)
 
-        # Результат — дробь с общим знаменателем
-        return Rational(new_numerator, lcm_denominator)
+        # Сокращаем дробь
+        answer = RationalOperations.RED_Q_Q(Rational(new_numerator, lcm_denominator))
+
+        return answer
 
     # Q-7 Разработчик:Глебова.В
     @staticmethod
@@ -135,12 +145,12 @@ class RationalOperations:
         """
         # Умножаем числители
         new_numerator = IntegerOperations.MUL_ZZ_Z(fraction1.numerator, fraction2.numerator)
-
         # Умножаем знаменатели
-        new_denominator = IntegerOperations.MUL_ZZ_Z(fraction1.denominator, fraction2.denominator)
+        new_denominator = NaturalOperations.MUL_NN_N(fraction1.denominator, fraction2.denominator)
 
         # Возвращаем результат в виде новой дроби
-        return Rational(new_numerator, new_denominator)
+        answer = RationalOperations.RED_Q_Q(Rational(new_numerator, new_denominator))
+        return answer
 
     # Q-8 Разработчик:Джаватова.З
     @staticmethod
@@ -159,18 +169,11 @@ class RationalOperations:
         # Инвертируем вторую дробь
         inverted_fraction2_numerator = fraction2.denominator
         inverted_fraction2_denominator = fraction2.numerator
-
+        
         # Умножаем первую дробь на инвертированную вторую дробь
-        new_numerator = IntegerOperations.MUL_ZZ_Z(fraction1.numerator, inverted_fraction2_numerator)
-        new_denominator = IntegerOperations.MUL_ZZ_Z(fraction1.denominator, inverted_fraction2_denominator)
+        new_numerator = IntegerOperations.MUL_ZZ_Z(fraction1.numerator, Integer(str(inverted_fraction2_numerator)))
+        new_denominator = IntegerOperations.MUL_ZZ_Z(Integer(str(fraction1.denominator)), inverted_fraction2_denominator)
 
         # Возвращаем результат как новую дробь
-        return Rational(new_numerator, new_denominator)
-
-
-
-
-
-
-
-
+        answer = RationalOperations.RED_Q_Q(Rational(new_numerator, new_denominator))
+        return answer

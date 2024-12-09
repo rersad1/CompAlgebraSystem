@@ -43,6 +43,11 @@ class Integer:
         """Возвращает количество цифр в числе."""
         return len(self.digits)
 
+    def __eq__(self, other):
+        if isinstance(other, Integer):
+            return str(self) == str(other)
+        return False
+    
 
 class Natural:
     """
@@ -80,7 +85,11 @@ class Natural:
         """Возвращает количество цифр в числе."""
         return len(self.digits)
 
-
+    def __eq__(self, other):
+        if isinstance(other, Natural):
+            return str(self) == str(other)
+        return False
+    
 class Rational:
     """
     Класс для работы с рациональными числами.
@@ -106,7 +115,11 @@ class Rational:
         """
         return f"{self.numerator}/{self.denominator}" if int(self.denominator) != 1 else str(self.numerator)
 
-
+    def __eq__(self, other):
+        if isinstance(other, Rational):
+            return self.numerator == other.numerator and self.denominator == other.denominator
+        return False
+    
 class PolynomialNode:
     """
     Узел двусвязного списка, представляющий одночлен многочлена.

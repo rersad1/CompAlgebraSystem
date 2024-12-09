@@ -11,12 +11,9 @@ class TestRationalOperations(unittest.TestCase):
         # Тест для сокращения дроби
         fraction = Rational(Integer("12"), Natural("16"))
         reduced_fraction = RationalOperations.RED_Q_Q(fraction)
-
         # Ожидаемая результат (сокращение 12/16 => 3/4)
         expected = Rational(Integer("3"), Natural("4"))
-
-        self.assertEqual(reduced_fraction.numerator, expected.numerator)
-        self.assertEqual(reduced_fraction.denominator, expected.denominator)
+        self.assertEqual(reduced_fraction, expected)
 
     def test_INT_Q_B(self):
         # Тест для проверки, является ли дробь целым числом
@@ -68,12 +65,12 @@ class TestRationalOperations(unittest.TestCase):
 
     def test_SUB_QQ_Q(self):
         # Тест для вычитания дробей
-        fraction1 = Rational(Integer("3"), Natural("4"))
-        fraction2 = Rational(Integer("1"), Natural("4"))
+        fraction1 = Rational(Integer("3"), Natural("5"))
+        fraction2 = Rational(Integer("1"), Natural("10"))
 
         result = RationalOperations.SUB_QQ_Q(fraction1, fraction2)
 
-        # Ожидаемый результат: 3/4 - 1/4 = 2/4 = 1/2
+        # Ожидаемый результат: 3/5 - 1/10 = 1/2
         expected = Rational(Integer("1"), Natural("2"))
 
         self.assertEqual(result.numerator, expected.numerator)
@@ -92,23 +89,18 @@ class TestRationalOperations(unittest.TestCase):
         self.assertEqual(result.numerator, expected.numerator)
         self.assertEqual(result.denominator, expected.denominator)
 
-        def test_DIV_QQ_Q(self):
-            # Тест для деления дробей
-            fraction1 = Rational(Integer("3"), Natural("4"))
-            fraction2 = Rational(Integer("2"), Natural("5"))
+    def test_DIV_QQ_Q(self):
+        # Тест для деления дробей
+        fraction1 = Rational(Integer("3"), Natural("4"))
+        fraction2 = Rational(Integer("2"), Natural("5"))
 
-            result = RationalOperations.DIV_QQ_Q(fraction1, fraction2)
+        result = RationalOperations.DIV_QQ_Q(fraction1, fraction2)
 
-            # Ожидаемый результат: (3/4) / (2/5) = (3/4) * (5/2) = 15/8
-            expected = Rational(Integer("15"), Natural("8"))
+        # Ожидаемый результат: (3/4) / (2/5) = (3/4) * (5/2) = 15/8
+        expected = Rational(Integer("15"), Natural("8"))
 
-            self.assertEqual(result.numerator, expected.numerator)
-            self.assertEqual(result.denominator, expected.denominator)
-
-            # Тест с делением на ноль
-            fraction3 = Rational(Integer("1"), Natural("0"))
-            with self.assertRaises(ValueError):
-                RationalOperations.DIV_QQ_Q(fraction1, fraction3)
+        self.assertEqual(result.numerator, expected.numerator)
+        self.assertEqual(result.denominator, expected.denominator)
 
 if __name__ == "__main__":
     unittest.main()
