@@ -177,7 +177,7 @@ class IntegerOperations:
         """
         # Проверяем, что делитель не равен нулю.
         if IntegerOperations.POZ_Z_D(num2) == 0:
-            raise ZeroDivisionError("Делитель не может быть равен нулю.")
+            raise ValueError("Делитель не может быть равен нулю.")
 
         # Получаем абсолютные значения чисел.
         abs_num1 = IntegerOperations.ABS_Z_N(num1)
@@ -205,7 +205,7 @@ class IntegerOperations:
         """
         # Проверяем делитель на ноль.
         if IntegerOperations.POZ_Z_D(num2) == 0:
-            raise ZeroDivisionError("Делитель не может быть равен нулю.")
+            raise ValueError("Делитель не может быть равен нулю.")
 
         # Получаем частное от деления.
         quotient = IntegerOperations.DIV_ZZ_Z(num1, num2)

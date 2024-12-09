@@ -169,8 +169,8 @@ class AlgebraSystemApp(tk.Tk):
                 result = ", ".join(map(str, result))
             self.result_text.insert(tk.END, f"Результат: {result}")
             self.result_text.config(state="disabled")
-        except ValueError:
-            messagebox.showwarning("Ошибка", "Некорректный формат данных. Введите натуральные числа.")
+        except ValueError as e:
+            messagebox.showwarning("Ошибка", str(e))
 
     def process_integer_number(self, module_function):
         input_data = self.input_entry.get().strip()
@@ -189,8 +189,8 @@ class AlgebraSystemApp(tk.Tk):
                 result = ", ".join(map(str, result))
             self.result_text.insert(tk.END, f"Результат: {result}")
             self.result_text.config(state="disabled")
-        except ValueError:
-            messagebox.showwarning("Ошибка", "Некорректный формат данных. Введите целые числа.")
+        except ValueError as e:
+            messagebox.showwarning("Ошибка", str(e))
 
     def process_rational_number(self, module_function):
         input_data = self.input_entry.get().strip()
@@ -201,7 +201,10 @@ class AlgebraSystemApp(tk.Tk):
             # Преобразуем данные в рациональные числа
             inputs = []
             for fraction in input_data.split(","):
-                numerator, denominator = fraction.strip().split("/")
+                fraction = fraction.strip()
+                if '/' not in fraction:
+                    raise ValueError(f"Некорректный формат дроби: '{fraction}'. Ожидается 'числитель/знаменатель'.")
+                numerator, denominator = fraction.split("/")
                 inputs.append(Rational(Integer(numerator.strip()), Natural(denominator.strip())))
 
             result = module_function(*inputs)
@@ -211,9 +214,8 @@ class AlgebraSystemApp(tk.Tk):
                 result = ", ".join(map(str, result))
             self.result_text.insert(tk.END, f"Результат: {result}")
             self.result_text.config(state="disabled")
-        except ValueError:
-            messagebox.showwarning("Ошибка",
-                                   "Некорректный формат данных. Введите дроби в формате 'числитель/знаменатель'.")
+        except ValueError as e:
+            messagebox.showwarning("Ошибка", str(e))
 
 
 # Запуск приложения

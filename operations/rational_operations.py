@@ -98,7 +98,7 @@ class RationalOperations:
         result_numerator = IntegerOperations.ADD_ZZ_Z(new_numerator1, new_numerator2)
 
         # Возвращаем результат как новую дробь с общим знаменателем
-        return Rational(result_numerator, lcm_denominator)
+        return RationalOperations.RED_Q_Q(Rational(result_numerator, lcm_denominator))
 
     # Q-6 Разработчик:Басик.В
     @staticmethod
