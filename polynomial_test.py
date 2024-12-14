@@ -1,5 +1,5 @@
 import unittest
-from classes import Polynomial, Rational, Natural, Integer
+from classes import *
 from operations.rational_operations import RationalOperations
 from operations.polynomial_operation import PolynomialOperations
 
@@ -32,10 +32,7 @@ class TestPolynomialOperations(unittest.TestCase):
         result = PolynomialOperations.ADD_PP_P(self.poly1, self.poly2)
 
         # Проверим полученный многочлен: (3x^2 + 2x + 1) + (4x^2 + 3x + 2) = 7x^2 + 5x + 3
-        expected = Polynomial()
-        expected.add_term(Natural("2"), Rational(Integer("7")))  # 7x^2
-        expected.add_term(Natural("1"), Rational(Integer("5")))  # 5x
-        expected.add_term(Natural("0"), Rational(Integer("3")))  # 3
+        expected = create_polynomial("7x^2+5x+3")
 
         self.assertEqual(result, expected)
 
