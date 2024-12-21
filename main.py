@@ -180,7 +180,7 @@ class AlgebraSystemApp(tk.Tk):
 
         try:
             # Преобразуем данные в целые числа
-            inputs = [Integer(x.strip()) for x in input_data.split(",") if int(x.strip()) >= 0]
+            inputs = [Integer(x.strip()) for x in input_data.split(",")]
             result = module_function(*inputs)
 
             self.result_text.config(state="normal")
