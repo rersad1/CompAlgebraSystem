@@ -184,7 +184,7 @@ class IntegerOperations:
         abs_num2 = IntegerOperations.ABS_Z_N(num2)
 
         # Выполняем деление как натуральных чисел.
-        quotient_abs, _ = NaturalOperations.DIV_NN_N(abs_num1, abs_num2)  # Получаем только частное.
+        quotient_abs = NaturalOperations.DIV_NN_N(abs_num1, abs_num2)  # Получаем только частное.
 
         # Определяем знак результата.
         poz_num1 = IntegerOperations.POZ_Z_D(num1)
