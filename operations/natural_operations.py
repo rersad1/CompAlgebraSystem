@@ -129,10 +129,11 @@ class NaturalOperations:
 
     # N-6 Разработчик: Джаватова.З
     @staticmethod
-    def MUL_ND_N(num: Natural, digit: int) -> Natural:
+    def MUL_ND_N(num: Natural, digit: Natural) -> Natural:
         """
         Умножение натурального числа на цифру (от 0 до 9).
         """
+        digit = digit.__int__()
         # Проверка, что цифра находится в допустимом диапазоне
         if not (0 <= digit <= 9):
             raise ValueError("Цифра должна быть в пределах от 0 до 9.")
