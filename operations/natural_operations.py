@@ -236,7 +236,7 @@ class NaturalOperations:
     def DIV_NN_N(num1: Natural, num2: Natural) -> (Natural, Natural):
         """
         Деление первого натурального числа на второе с остатком.
-        Возвращает частное и остаток.
+        Возвращает частное.
         """
         # Проверка, что делитель не равен нулю
         if NaturalOperations.NZER_N_B(num2) == "нет":
