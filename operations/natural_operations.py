@@ -191,10 +191,11 @@ class NaturalOperations:
 
     # N-9 Разработчик: Раутио.И
     @staticmethod
-    def SUB_NDN_N(num1: Natural, num2: Natural, digit: int) -> Natural:
+    def SUB_NDN_N(num1: Natural, num2: Natural, digit: Natural) -> Natural:
         """
         Вычитает из первого натурального числа результат умножения второго натурального числа на цифру.
         """
+        digit = digit.__int__()
         # Проверка, что цифра находится в допустимом диапазоне (от 0 до 9)
         if digit < 0 or digit > 9:
             raise ValueError("Цифра должна быть в пределах от 0 до 9.")
