@@ -9,36 +9,36 @@ class PolynomialOperations:
     def ADD_PP_P(poly1: Polynomial, poly2: Polynomial) -> Polynomial:
         """
         Сложение двух многочленов.
-        :param poly1: первый многочлен.
-        :param poly2: второй многочлен.
-        :return: новый многочлен, являющийся результатом сложения poly1 и poly2.
         """
         result = Polynomial()
 
-        # Сложение одночленов первого многочлена
+        # Копируем первый многочлен в результат
         current1 = poly1.head
         while current1:
             result.add_term(current1.degree, current1.coefficient)
             current1 = current1.next
 
-        # Сложение одночленов второго многочлена с использованием ADD_QQ_Q для коэффициентов
+        # Добавляем члены второго многочлена
         current2 = poly2.head
         while current2:
-            degree2 = current2.degree
-            coefficient2 = current2.coefficient
-            # Найдем одночлен с такой же степенью в первом многочлене
-            current1 = poly1.head
-            while current1:
-                if current1.degree == degree2:
-                    # Если степени совпадают, сложим коэффициенты
-                    new_coefficient = RationalOperations.ADD_QQ_Q(current1.coefficient, coefficient2)
-                    result.add_term(degree2, new_coefficient)
+            found = False
+            current_result = result.head
+            
+            # Ищем член с такой же степенью в результате
+            while current_result:
+                if int(current_result.degree) == int(current2.degree):
+                    # Складываем коэффициенты
+                    new_coefficient = RationalOperations.ADD_QQ_Q(current_result.coefficient, current2.coefficient)
+                    # Обновляем коэффициент в результате
+                    current_result.coefficient = new_coefficient
+                    found = True
                     break
-                current1 = current1.next
-            else:
-                # Если степень не найдена, добавляем одночлен в результат
-                result.add_term(degree2, coefficient2)
-
+                current_result = current_result.next
+                
+            # Если не нашли член с такой степенью - добавляем новый
+            if not found:
+                result.add_term(current2.degree, current2.coefficient)
+                
             current2 = current2.next
 
         return result
@@ -70,13 +70,11 @@ class PolynomialOperations:
                 current2 = current2.next
             else:
                 # Если степени одночленов равны, вычитаем их коэффициенты с использованием SUB_QQ_Q
-                coeff_diff = Rational(
-                    Integer(str(int(current1.coefficient.numerator) - int(current2.coefficient.numerator))))
+                coeff_diff = RationalOperations.SUB_QQ_Q(current1.coefficient, current2.coefficient)
                 if coeff_diff.numerator != 0:  # Добавляем только ненулевые коэффициенты
                     result.add_term(current1.degree, coeff_diff)
                 current1 = current1.next
                 current2 = current2.next
-
         return result
 
     # P-3 Разработчик:Березовский.М
@@ -92,16 +90,14 @@ class PolynomialOperations:
         result = Polynomial()
 
         current = poly.head
-
         # Проходим по всем одночленам в многочлене
         while current:
             # Умножаем коэффициент каждого одночлена на рациональное число
-            new_coeff = Rational(Integer(str(int(current.coefficient.numerator))), current.coefficient.denominator)
+            new_coeff = Rational(current.coefficient.numerator, current.coefficient.denominator)
             multiplied_coeff = RationalOperations.MUL_QQ_Q(new_coeff, q)
 
             # Добавляем результат умножения в новый многочлен
             result.add_term(current.degree, multiplied_coeff)
-
             # Переходим к следующему одночлену
             current = current.next
 
@@ -281,43 +277,44 @@ class PolynomialOperations:
 
     # P-9 Разработчик:Раутио.И
     @staticmethod
-    def DIV_PP_P(dividend: Polynomial, divisor: Polynomial) -> (Polynomial, Polynomial):
+    def DIV_PP_P(dividend: Polynomial, divisor: Polynomial) -> Polynomial:
         """
-        Деление многочлена на многочлен с остатком.
-
-        :param dividend: Многочлен-делимое.
-        :param divisor: Многочлен-делитель.
-        :return: Кортеж (частное, остаток).
+        Деление многочлена на многочлен без остатка.
+        dividend  - делимое
+        divisor - делитель
+        quotient - частное
         """
-        # Создаем пустые многочлены для частного и остатка
         quotient = Polynomial()
-        remainder = Polynomial()
-        remainder.head = dividend.head  # Начинаем с копии делимого как остатка
-
-        while int(PolynomialOperations.DEG_P_N(remainder)) >= int(PolynomialOperations.DEG_P_N(divisor)):  # Пока степень остатка >= степени делителя
-            # Ведущие коэффициенты делимого и делителя
-            leading_term_remainder = remainder.head
-            leading_term_divisor = divisor.head
-
-            # Вычисляем коэффициент частного для текущей степени
-            quotient_coeff = RationalOperations.DIV_QQ_Q(leading_term_remainder.coefficient, leading_term_divisor.coefficient)
-
-            # Степень для текущего частного
-            degree_diff = Natural(str(int(leading_term_remainder.degree) - int(leading_term_divisor.degree)))
-
-            # Создаем одночлен для частного
+        dividend_current = dividend.head
+        divisor_current = divisor.head
+        
+        # Находим последние элементы
+        while dividend_current.next:
+            dividend_current = dividend_current.next
+        while divisor_current.next:
+            divisor_current = divisor_current.next
+            
+        while int(dividend_current.degree) >= int(divisor_current.degree):
+            # Вычисляем коэффициент частного
+            quotient_coeff = RationalOperations.DIV_QQ_Q(dividend_current.coefficient, divisor_current.coefficient)
+            # Разница степеней
+            degree_diff = NaturalOperations.SUB_NN_N(dividend_current.degree, divisor_current.degree)
+            # Добавляем член в частное
             quotient.add_term(degree_diff, quotient_coeff)
+            print(quotient, "ЧАСТНОЕ")
+            # Получаем вычитаемое
+            temp_poly = PolynomialOperations.MUL_PQ_P(divisor, quotient_coeff)
+            temp_poly = PolynomialOperations.MUL_Pxk_P(temp_poly, degree_diff)
+            print(temp_poly, "ВРЕМЕННЫЙ ДЛЯ ВЫЧИТАНИЯ")
+            print(dividend, "ДЕЛИМОЕ ПЕРЕД ВЫЧИТАНИЕМ")
+            dividend = PolynomialOperations.SUB_PP_P(dividend, temp_poly)
+            print(dividend, "ДЕЛИМОЕ ПОСЛЕ ВЫЧИТАНИЯ")
+            # Обновляем указатель на текущий старший член
+            dividend_current = dividend.head
+            while dividend_current.next:
+                dividend_current = dividend_current.next
 
-            # Умножаем делитель на x^k, где k - разница степеней
-            temp_poly = PolynomialOperations.MUL_Pxk_P(divisor, degree_diff)
-
-            # Умножаем делитель на коэффициент частного
-            temp_poly = PolynomialOperations.MUL_PQ_P(temp_poly, quotient_coeff)
-
-            # Вычитаем полученный результат из остатка (делимого)
-            remainder = PolynomialOperations.SUB_PP_P(remainder, temp_poly)
-
-        return quotient, remainder
+        return quotient
 
     # P-10 Разработчик:Раутио.И
     @staticmethod
@@ -330,10 +327,12 @@ class PolynomialOperations:
         :return: Остаток от деления.
         """
         # Шаг 1: Получаем частное и остаток от деления
+        print("ПЕРЕД ОСТАТКОМ ОТ ДЕЛЕНИЯ")
         quotient, remainder = PolynomialOperations.DIV_PP_P(dividend, divisor)
-
+        print(quotient, remainder)
         # Шаг 2: Проверка остатка: remainder должно быть остатком после деления
         product = PolynomialOperations.MUL_PP_P(quotient, divisor)
+        print("ПОСЛЕ ПОЛУЧЕНИЯ ПРОДАКТА")
         remainder_check = PolynomialOperations.SUB_PP_P(dividend, product)
 
         # Если remainder_check равен нулевому многочлену, значит остаток корректен
@@ -351,14 +350,23 @@ class PolynomialOperations:
         :return: НОД двух многочленов.
         """
         # Применяем алгоритм Евклида для многочленов
-        while PolynomialOperations.DEG_P_N(poly2) > 0:
+        coefficient = PolynomialOperations.DEG_P_N(poly2)
+        print('УСПЕХ ПОЛУЧЕНИЯ КОЭФФИЦИЕНТА')
+        string_answer = NaturalOperations.NZER_N_B(coefficient)
+        print('УСПЕХ ПОЛУЧЕНИЯ СТРОКОВОГО ОТВЕТА')
+        while string_answer == "да":
+            print("УЖЕ В ЦКИЛЕ")
             # Находим остаток от деления poly1 на poly2
             remainder = PolynomialOperations.MOD_PP_P(poly1, poly2)
-
+            print("ПОЛУЧИЛИ ОСТАТОК")
+            print(remainder)
             # Обновляем poly1 и poly2 для следующего шага алгоритма
             poly1, poly2 = poly2, remainder
 
-        return poly1  # НОД - это последний ненулевой остаток
+            coefficient = PolynomialOperations.DEG_P_N(poly2)
+            string_answer = NaturalOperations.NZER_N_B(coefficient)
+
+        return remainder  # НОД - это последний ненулевой остаток
 
     # P-12 Разработчик:Потоцкий.С
     @staticmethod

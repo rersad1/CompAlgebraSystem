@@ -149,20 +149,40 @@ class Polynomial:
 
     def __str__(self):
         """
-        Возвращает строковое представление многочлена.
+        Возвращает строковое представление многочлена в порядке убывания степеней.
         """
-        terms = []
+        # Собираем все ненулевые члены в словарь, где ключ - степень
+        terms = {}
         current = self.head
         while current:
-            coeff = int(current.coefficient.numerator)
-            if coeff != 0:
-                sign = " - " if coeff < 0 else (" + " if terms else "")
-                abs_coeff = abs(coeff)
-                term = f"{abs_coeff}x^{current.degree}" if int(current.degree) > 1 else \
-                    (f"{abs_coeff}x" if int(current.degree) == 1 else str(abs_coeff))
-                terms.append(sign + term)
+            if int(current.coefficient.numerator) != 0:
+                terms[int(current.degree)] = current
             current = current.next
-        return ''.join(terms) if terms else "0"
+        
+        # Сортируем степени по убыванию
+        sorted_degrees = sorted(terms.keys(), reverse=True)
+        
+        if not sorted_degrees:
+            return "0"
+            
+        result = []
+        for degree in sorted_degrees:
+            coeff = int(terms[degree].coefficient.numerator)
+            if coeff != 0:
+                sign = " - " if coeff < 0 else (" + " if result else "")
+                abs_coeff = abs(coeff)
+                coeff_str = "" if abs_coeff == 1 and int(degree) > 0 else str(abs_coeff)
+                
+                if int(degree) > 1:
+                    term = f"{coeff_str}x^{degree}"
+                elif int(degree) == 1:
+                    term = f"{coeff_str}x"
+                else:
+                    term = str(abs_coeff)
+                    
+                result.append(sign + term)
+                
+        return ''.join(result) if result else "0"
 
     def add_term(self, degree: Natural, coefficient: Rational):
         """
@@ -223,6 +243,13 @@ class Polynomial:
                 raise ValueError(f"Некорректный коэффициент: '{coeff}'")
 
             self.add_term(Natural(degree), Rational(Integer(coeff)))
+    
+    def __eq__(self, other):
+        if not isinstance(other, Polynomial):
+            return False
+            
+        # Преобразуем оба многочлена в строки для сравнения
+        return str(self) == str(other)        
 
 def create_polynomial(input_str: str) -> Polynomial:
     """

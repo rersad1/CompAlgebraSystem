@@ -7,45 +7,22 @@ from operations.polynomial_operation import PolynomialOperations
 class TestPolynomialOperations(unittest.TestCase):
 
     def setUp(self):
-        # Для тестирования создадим несколько примеров многочленов
-        self.poly1 = Polynomial()
-        self.poly2 = Polynomial()
-        self.poly3 = Polynomial()
-
-        # Добавление одночленов в poly1: 3x^2 + 2x + 1
-        self.poly1.add_term(Natural("2"), Rational(Integer("3")))  # 3x^2
-        self.poly1.add_term(Natural("1"), Rational(Integer("2")))  # 2x
-        self.poly1.add_term(Natural("0"), Rational(Integer("1")))  # 1
-
-        # Добавление одночленов в poly2: 4x^2 + 3x + 2
-        self.poly2.add_term(Natural("2"), Rational(Integer("4")))  # 4x^2
-        self.poly2.add_term(Natural("1"), Rational(Integer("3")))  # 3x
-        self.poly2.add_term(Natural("0"), Rational(Integer("2")))  # 2
-
-        # poly3: 5x^3 + 3x^2 + x
-        self.poly3.add_term(Natural("3"), Rational(Integer("5")))  # 5x^3
-        self.poly3.add_term(Natural("2"), Rational(Integer("3")))  # 3x^2
-        self.poly3.add_term(Natural("1"), Rational(Integer("1")))  # x
+        self.poly1 = create_polynomial("3x^2+2x+1")
+        self.poly2 = create_polynomial("4x^2+3x+2")
+        self.poly3 = create_polynomial("5x^3+3x^2+x")
 
     def test_add_polynomials(self):
         # Проверка сложения двух многочленов
-        result = PolynomialOperations.ADD_PP_P(self.poly1, self.poly2)
-
+        result = PolynomialOperations.ADD_PP_P(self.poly1, self.poly3)
         # Проверим полученный многочлен: (3x^2 + 2x + 1) + (4x^2 + 3x + 2) = 7x^2 + 5x + 3
-        expected = create_polynomial("7x^2+5x+3")
-
+        expected = create_polynomial("5x^3 + 6x^2 + 3x + 1")
         self.assertEqual(result, expected)
 
     def test_sub_polynomials(self):
-        # Проверка вычитания двух многочленов
         result = PolynomialOperations.SUB_PP_P(self.poly1, self.poly2)
-
-        # Проверим полученный многочлен: (3x^2 + 2x + 1) - (4x^2 + 3x + 2) = -x^2 - x - 1
-        expected = Polynomial()
-        expected.add_term(Natural("2"), Rational(Integer("-1")))  # -x^2
-        expected.add_term(Natural("1"), Rational(Integer("-1")))  # -x
-        expected.add_term(Natural("0"), Rational(Integer("-1")))  # -1
-
+        expected = create_polynomial("-x^2-x-1")
+        print(expected)
+        print(result)
         self.assertEqual(result, expected)
 
     def test_multiply_polynomial_by_rational(self):
@@ -102,25 +79,22 @@ class TestPolynomialOperations(unittest.TestCase):
         dividend = Polynomial()
         divisor = Polynomial()
 
-        dividend.add_term(Natural("3"), Rational(Integer("5")))  # 5x^3
-        dividend.add_term(Natural("2"), Rational(Integer("3")))  # 3x^2
-        dividend.add_term(Natural("1"), Rational(Integer("1")))  # x
+        dividend.add_term(Natural("3"), Rational(Integer("4")))  # 5x^3
+        dividend.add_term(Natural("1"), Rational(Integer("2")))  # 3x^2
+        dividend.add_term(Natural("0"), Rational(Integer("-11")))  # x
 
-        divisor.add_term(Natural("2"), Rational(Integer("1")))  # x^2
-        divisor.add_term(Natural("1"), Rational(Integer("2")))  # 2x
-        divisor.add_term(Natural("0"), Rational(Integer("1")))  # 1
+        divisor.add_term(Natural("1"), Rational(Integer("1")))  # 2x
+        divisor.add_term(Natural("0"), Rational(Integer("5")))  # 1
 
-        quotient, remainder = PolynomialOperations.DIV_PP_P(dividend, divisor)
+        quotient = PolynomialOperations.DIV_PP_P(dividend, divisor)
 
         # Ожидаем частное: 5x + 7, остаток: 0
         expected_quotient = Polynomial()
         expected_quotient.add_term(Natural("1"), Rational(Integer("5")))  # 5x
         expected_quotient.add_term(Natural("0"), Rational(Integer("7")))  # 7
-
-        expected_remainder = Polynomial()  # Остаток 0
+        print(expected_quotient)
 
         self.assertEqual(quotient, expected_quotient)
-        self.assertEqual(remainder, expected_remainder)
 
 
 
