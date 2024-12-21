@@ -156,10 +156,11 @@ class NaturalOperations:
 
     # N-7 Разработчик: Тимошук.Е
     @staticmethod
-    def MUL_Nk_N(num: Natural, k: int) -> Natural:
+    def MUL_Nk_N(num: Natural, k: Natural) -> Natural:
         """
         Умножение натурального числа на 10^k.
         """
+        k = k.__int__()
         # Проверка, что k - неотрицательное число
         if k < 0:
             raise ValueError("k должно быть натуральным числом (неотрицательным).")
