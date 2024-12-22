@@ -409,11 +409,3 @@ class PolynomialOperations:
 
         return result_poly
 
-
-# poly1 = create_polynomial("100x^243 - 30000x + 6789")
-# print(f"{poly1}")
-# poly2 = create_polynomial("x^3 - x + 2")
-# poly3 = create_polynomial("-2x^4 + 7")
-#
-# res = PolynomialOperations.ADD_PP_P(poly1, poly2)
-# print(res)

@@ -31,13 +31,23 @@ class IntegerOperations:
         """
         Умножение целого числа на (-1).
         """
-        # Инвертируем знак числа (если было отрицательное, делаем положительным, и наоборот)
-        new_sign = not num.get_sign()  # Инвертируем знак.
-        digits_str = ''.join(map(str, num.get_digits()))  # Получаем строковое представление цифр числа.
+        # Получаем текущий знак и цифры числа
+        current_sign = num.get_sign()  # True если отрицательное, False если положительное
+        digits = num.get_digits()
 
-        # Создаём новое целое число с противоположным знаком.
-        new_number = ('-' if new_sign else '') + digits_str  # Если new_sign True, ставим минус.
-        return Integer(new_number)  # Возвращаем новое целое число с инвертированным знаком.
+        # Проверяем, является ли число нулём
+        is_zero = len(digits) == 1 and digits[0] == 0
+
+        if is_zero:
+            # Если число ноль, не инвертируем знак
+            new_number = '0'
+        else:
+            # Инвертируем знак числа
+            new_sign = not current_sign
+            digits_str = ''.join(map(str, digits))
+            new_number = ('-' if new_sign else '') + digits_str
+
+        return Integer(new_number)
 
     # Z-4 Разработчик: Потоцкий.С
     @staticmethod
@@ -190,10 +200,13 @@ class IntegerOperations:
         poz_num1 = IntegerOperations.POZ_Z_D(num1)
         poz_num2 = IntegerOperations.POZ_Z_D(num2)
 
-        if (poz_num1 == 1 and poz_num2 == 0) or (poz_num1 == 0 and poz_num2 == 1):
-            quotient = IntegerOperations.MUL_ZM_Z(Integer(str(quotient_abs)))  # Если результат отрицательный.
+        # Определяем, имеют ли числа противоположные знаки
+        if (poz_num1 == 1 and poz_num2 == 2) or (poz_num1 == 2 and poz_num2 == 1):
+            # Если делимое и делитель имеют противоположные знаки, результат отрицательный
+            quotient = IntegerOperations.MUL_ZM_Z(Integer(str(quotient_abs)))
         else:
-            quotient = Integer(str(quotient_abs))  # Если результат положительный.
+            # Если делимое и делитель имеют одинаковые знаки, результат положительный
+            quotient = Integer(str(quotient_abs))
 
         return quotient  # Возвращаем результат деления.
 
@@ -221,3 +234,4 @@ class IntegerOperations:
             remainder = IntegerOperations.MUL_ZM_Z(remainder)
 
         return remainder  # Возвращаем остаток от деления.
+
