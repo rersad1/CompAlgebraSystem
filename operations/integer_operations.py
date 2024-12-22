@@ -239,3 +239,4 @@ class IntegerOperations:
             remainder = IntegerOperations.MUL_ZM_Z(remainder)
 
         return remainder  # Возвращаем остаток от деления.
+

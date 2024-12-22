@@ -146,6 +146,8 @@ class AlgebraSystemApp(tk.Tk):
             self.process_integer_number(module_function)
         elif selected_category == "Рациональные числа":
             self.process_rational_number(module_function)
+        elif selected_category == "Многочлены с рациональными коэффициентами":
+            self.process_polynomal_number(module_function)
         else:
             messagebox.showwarning("Ошибка", "Неподдерживаемая категория.")
 
@@ -208,6 +210,26 @@ class AlgebraSystemApp(tk.Tk):
                 inputs.append(Rational(Integer(numerator.strip()), Natural(denominator.strip())))
 
             result = module_function(*inputs)
+            self.result_text.config(state="normal")
+            self.result_text.delete("1.0", tk.END)
+            if isinstance(result, (list, tuple)):
+                result = ", ".join(map(str, result))
+            self.result_text.insert(tk.END, f"Результат: {result}")
+            self.result_text.config(state="disabled")
+        except ValueError as e:
+            messagebox.showwarning("Ошибка", str(e))
+
+    def process_polynomal_number(self, module_function):
+        input_data = self.input_entry.get().strip()
+        if not input_data:
+            messagebox.showwarning("Ошибка", "Данные не введены.")
+            return
+
+        try:
+            # Преобразуем данные в целые числа
+            inputs = [create_polynomial(x.strip()) for x in input_data.split(",")]
+            result = module_function(*inputs)
+
             self.result_text.config(state="normal")
             self.result_text.delete("1.0", tk.END)
             if isinstance(result, (list, tuple)):
