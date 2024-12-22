@@ -45,36 +45,45 @@ class PolynomialOperations:
 
     # P-2 Разработчик:Потоцкий.С
     @staticmethod
-    def SUB_PP_P(poly1: Polynomial, poly2: Polynomial) -> Polynomial: #проверено
+    def SUB_PP_P(poly1: Polynomial, poly2: Polynomial) -> Polynomial:
         """
-        Метод для вычитания двух многочленов: poly1 - poly2.
-
-        :param poly1: Первый многочлен.
-        :param poly2: Второй многочлен.
-        :return: Результат вычитания двух многочленов.
+        Вычитание двух многочленов через прямое вычитание коэффициентов.
         """
         result = Polynomial()
 
+        # Копируем первый многочлен в результат
         current1 = poly1.head
-        current2 = poly2.head
+        while current1:
+            result.add_term(current1.degree, current1.coefficient)
+            current1 = current1.next
 
-        # Проходим по обоим многочленам, начиная с головы
-        while current1 or current2:
-            if current1 and (not current2 or int(current1.degree) > int(current2.degree)):
-                # Если текущий одночлен есть только в первом многочлене
-                result.add_term(current1.degree, current1.coefficient)
-                current1 = current1.next
-            elif current2 and (not current1 or int(current2.degree) > int(current1.degree)):
-                # Если текущий одночлен есть только во втором многочлене
-                result.add_term(current2.degree, Rational(Integer("-" + str(current2.coefficient.numerator))))
-                current2 = current2.next
-            else:
-                # Если степени одночленов равны, вычитаем их коэффициенты с использованием SUB_QQ_Q
-                coeff_diff = RationalOperations.SUB_QQ_Q(current1.coefficient, current2.coefficient)
-                if coeff_diff.numerator != 0:  # Добавляем только ненулевые коэффициенты
-                    result.add_term(current1.degree, coeff_diff)
-                current1 = current1.next
-                current2 = current2.next
+        # Вычитаем члены второго многочлена
+        current2 = poly2.head
+        while current2:
+            found = False
+            current_result = result.head
+            
+            # Ищем член с такой же степенью в результате
+            while current_result:
+                if int(current_result.degree) == int(current2.degree):
+                    # Вычитаем коэффициенты используя SUB_QQ_Q
+                    new_coefficient = RationalOperations.SUB_QQ_Q(current_result.coefficient, current2.coefficient)
+                    # Обновляем коэффициент в результате
+                    current_result.coefficient = new_coefficient
+                    found = True
+                    break
+                current_result = current_result.next
+                
+            # Если не нашли член с такой степенью - добавляем новый с противоположным знаком
+            if not found:
+                neg_coef = Rational(
+                    IntegerOperations.MUL_ZM_Z(current2.coefficient.numerator),
+                    current2.coefficient.denominator
+                )
+                result.add_term(current2.degree, neg_coef)
+                
+            current2 = current2.next
+
         return result
 
     # P-3 Разработчик:Березовский.М
@@ -88,12 +97,17 @@ class PolynomialOperations:
         :return: Новый многочлен, результат умножения.
         """
         result = Polynomial()
-
         current = poly.head
         # Проходим по всем одночленам в многочлене
         while current:
+            print(type(current.coefficient))
+            print(current.coefficient, "КОЭФФИЦИЕНТ")
+            print(current.coefficient.numerator, current.coefficient.denominator)
             # Умножаем коэффициент каждого одночлена на рациональное число
+            print("В ЦИКЛЕ")
+            print((current.coefficient.numerator, current.coefficient.denominator))
             new_coeff = Rational(current.coefficient.numerator, current.coefficient.denominator)
+            print(new_coeff, "НОВЫЙ КОЭФФИЦИЕНТ")
             multiplied_coeff = RationalOperations.MUL_QQ_Q(new_coeff, q)
 
             # Добавляем результат умножения в новый многочлен
@@ -280,36 +294,29 @@ class PolynomialOperations:
     def DIV_PP_P(dividend: Polynomial, divisor: Polynomial) -> Polynomial:
         """
         Деление многочлена на многочлен без остатка.
-        dividend  - делимое
-        divisor - делитель
-        quotient - частное
         """
         quotient = Polynomial()
         dividend_current = dividend.head
         divisor_current = divisor.head
         
-        # Находим последние элементы
         while dividend_current.next:
             dividend_current = dividend_current.next
         while divisor_current.next:
             divisor_current = divisor_current.next
             
         while int(dividend_current.degree) >= int(divisor_current.degree):
-            # Вычисляем коэффициент частного
             quotient_coeff = RationalOperations.DIV_QQ_Q(dividend_current.coefficient, divisor_current.coefficient)
-            # Разница степеней
             degree_diff = NaturalOperations.SUB_NN_N(dividend_current.degree, divisor_current.degree)
-            # Добавляем член в частное
             quotient.add_term(degree_diff, quotient_coeff)
             print(quotient, "ЧАСТНОЕ")
             # Получаем вычитаемое
-            temp_poly = PolynomialOperations.MUL_PQ_P(divisor, quotient_coeff)
-            temp_poly = PolynomialOperations.MUL_Pxk_P(temp_poly, degree_diff)
+
+            temp_poly = PolynomialOperations.MUL_Pxk_P(divisor, degree_diff)
             print(temp_poly, "ВРЕМЕННЫЙ ДЛЯ ВЫЧИТАНИЯ")
-            print(dividend, "ДЕЛИМОЕ ПЕРЕД ВЫЧИТАНИЕМ")
+            temp_poly = PolynomialOperations.MUL_PQ_P(temp_poly, quotient_coeff)
+
             dividend = PolynomialOperations.SUB_PP_P(dividend, temp_poly)
-            print(dividend, "ДЕЛИМОЕ ПОСЛЕ ВЫЧИТАНИЯ")
-            # Обновляем указатель на текущий старший член
+            
             dividend_current = dividend.head
             while dividend_current.next:
                 dividend_current = dividend_current.next

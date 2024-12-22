@@ -21,8 +21,6 @@ class TestPolynomialOperations(unittest.TestCase):
     def test_sub_polynomials(self):
         result = PolynomialOperations.SUB_PP_P(self.poly1, self.poly2)
         expected = create_polynomial("-x^2-x-1")
-        print(expected)
-        print(result)
         self.assertEqual(result, expected)
 
     def test_multiply_polynomial_by_rational(self):

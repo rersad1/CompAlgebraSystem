@@ -31,13 +31,23 @@ class IntegerOperations:
         """
         Умножение целого числа на (-1).
         """
-        # Инвертируем знак числа (если было отрицательное, делаем положительным, и наоборот)
-        new_sign = not num.get_sign()  # Инвертируем знак.
-        digits_str = ''.join(map(str, num.get_digits()))  # Получаем строковое представление цифр числа.
+        # Получаем текущий знак и цифры числа
+        current_sign = num.get_sign()  # True если отрицательное, False если положительное
+        digits = num.get_digits()
 
-        # Создаём новое целое число с противоположным знаком.
-        new_number = ('-' if new_sign else '') + digits_str  # Если new_sign True, ставим минус.
-        return Integer(new_number)  # Возвращаем новое целое число с инвертированным знаком.
+        # Проверяем, является ли число нулём
+        is_zero = len(digits) == 1 and digits[0] == 0
+
+        if is_zero:
+            # Если число ноль, не инвертируем знак
+            new_number = '0'
+        else:
+            # Инвертируем знак числа
+            new_sign = not current_sign
+            digits_str = ''.join(map(str, digits))
+            new_number = ('-' if new_sign else '') + digits_str
+
+        return Integer(new_number)
 
     # Z-4 Разработчик: Потоцкий.С
     @staticmethod
@@ -80,6 +90,7 @@ class IntegerOperations:
         abs_num1 = IntegerOperations.ABS_Z_N(num1)
         abs_num2 = IntegerOperations.ABS_Z_N(num2)
 
+
         if poz1 == poz2:  # Оба числа одного знака.
             # Складываем их абсолютные значения (модули).
             sum_abs = NaturalOperations.ADD_NN_N(abs_num1, abs_num2)
@@ -111,40 +122,42 @@ class IntegerOperations:
         """
         Вычитание двух целых чисел.
         """
-        # Определяем знак каждого числа.
-        poz_num1 = IntegerOperations.POZ_Z_D(num1)  # Знак первого числа.
-        poz_num2 = IntegerOperations.POZ_Z_D(num2)  # Знак второго числа.
+        # Определяем знак каждого числа
+        poz_num1 = IntegerOperations.POZ_Z_D(num1)
+        poz_num2 = IntegerOperations.POZ_Z_D(num2)
 
-        # Преобразуем целые числа в натуральные (их абсолютные значения).
+        # Преобразуем целые числа в натуральные (их абсолютные значения)
         abs_num1 = IntegerOperations.ABS_Z_N(num1)
         abs_num2 = IntegerOperations.ABS_Z_N(num2)
 
-        if poz_num1 != poz_num2:  # Если числа с разными знаками.
-            # Складываем модули чисел (их абсолютные значения).
+        if poz_num1 != poz_num2:  # Если числа с разными знаками
+            # Складываем модули чисел
             result_abs = NaturalOperations.ADD_NN_N(abs_num1, abs_num2)
 
-            # Если первое число отрицательное, результат будет с минусом.
+            # Знак результата зависит от знака первого числа
             if poz_num1 == 1:
                 result = IntegerOperations.MUL_ZM_Z(Integer(str(result_abs)))
             else:
                 result = Integer(str(result_abs))
-        else:  # Если числа с одинаковыми знаками.
-            # Сравниваем их абсолютные значения.
+        else:  # Если числа с одинаковыми знаками
+            # Сравниваем их абсолютные значения
             comparison = NaturalOperations.COM_NN_D(abs_num1, abs_num2)
-            if comparison == 2:  # abs_num1 >= abs_num2
-                result_abs = NaturalOperations.SUB_NN_N(abs_num1, abs_num2)  # Вычитаем меньшее из большего.
-                if poz_num1 == 1:  # Если оба числа отрицательные, результат тоже отрицателен.
+            
+            if comparison == 2:  # |num1| > |num2|
+                result_abs = NaturalOperations.SUB_NN_N(abs_num1, abs_num2)
+                if poz_num1 == 1:  # Если оба отрицательные
                     result = IntegerOperations.MUL_ZM_Z(Integer(str(result_abs)))
                 else:
                     result = Integer(str(result_abs))
-            else:  # abs_num1 < abs_num2
-                result_abs = NaturalOperations.SUB_NN_N(abs_num2, abs_num1)  # Вычитаем меньший модуль из большего.
-                if poz_num1 == 0:  # Если первое число положительное, результат будет отрицательным.
-                    result = IntegerOperations.MUL_ZM_Z(Integer(str(result_abs)))
-                else:
+            else:  # |num1| ≤ |num2|
+                result_abs = NaturalOperations.SUB_NN_N(abs_num2, abs_num1)
+                # Ключевое изменение: всегда делаем результат отрицательным при вычитании большего из меньшего
+                if poz_num1 == 1:  # Если оба отрицательные
                     result = Integer(str(result_abs))
+                else:  # Если оба положительные
+                    result = IntegerOperations.MUL_ZM_Z(Integer(str(result_abs)))
 
-        return result  # Возвращаем результат вычитания.
+        return result
 
     # Z-8 Разработчик: Березовский.М
     @staticmethod
@@ -155,6 +168,7 @@ class IntegerOperations:
         # Определяем знак каждого числа.
         poz_num1 = IntegerOperations.POZ_Z_D(num1)  # Знак первого числа.
         poz_num2 = IntegerOperations.POZ_Z_D(num2)  # Знак второго числа.
+
 
         # Умножаем абсолютные значения чисел.
         abs_num1 = IntegerOperations.ABS_Z_N(num1)
@@ -190,14 +204,18 @@ class IntegerOperations:
         poz_num1 = IntegerOperations.POZ_Z_D(num1)
         poz_num2 = IntegerOperations.POZ_Z_D(num2)
 
-        if (poz_num1 == 1 and poz_num2 == 0) or (poz_num1 == 0 and poz_num2 == 1):
-            quotient = IntegerOperations.MUL_ZM_Z(Integer(str(quotient_abs)))  # Если результат отрицательный.
+        # Определяем, имеют ли числа противоположные знаки
+        if (poz_num1 == 1 and poz_num2 == 2) or (poz_num1 == 2 and poz_num2 == 1):
+            # Если делимое и делитель имеют противоположные знаки, результат отрицательный
+            quotient = IntegerOperations.MUL_ZM_Z(Integer(str(quotient_abs)))
         else:
-            quotient = Integer(str(quotient_abs))  # Если результат положительный.
+            # Если делимое и делитель имеют одинаковые знаки, результат положительный
+            quotient = Integer(str(quotient_abs))
 
         return quotient  # Возвращаем результат деления.
 
     # Z-10 Разработчик: Глебова.В
+    @staticmethod
     @staticmethod
     def MOD_ZZ_Z(num1: Integer, num2: Integer) -> Integer:
         """

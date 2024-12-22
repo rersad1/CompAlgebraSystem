@@ -16,7 +16,7 @@ class AlgebraSystemApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Система компьютерной алгебры")
-        self.geometry("900x800")
+        self.geometry("1200x1000")
 
         # Категории и модули
         self.categories = {
