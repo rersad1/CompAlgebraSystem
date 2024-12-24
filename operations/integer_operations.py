@@ -90,6 +90,7 @@ class IntegerOperations:
         abs_num1 = IntegerOperations.ABS_Z_N(num1)
         abs_num2 = IntegerOperations.ABS_Z_N(num2)
 
+
         if poz1 == poz2:  # Оба числа одного знака.
             # Складываем их абсолютные значения (модули).
             sum_abs = NaturalOperations.ADD_NN_N(abs_num1, abs_num2)
@@ -121,40 +122,42 @@ class IntegerOperations:
         """
         Вычитание двух целых чисел.
         """
-        # Определяем знак каждого числа.
-        poz_num1 = IntegerOperations.POZ_Z_D(num1)  # Знак первого числа.
-        poz_num2 = IntegerOperations.POZ_Z_D(num2)  # Знак второго числа.
+        # Определяем знак каждого числа
+        poz_num1 = IntegerOperations.POZ_Z_D(num1)
+        poz_num2 = IntegerOperations.POZ_Z_D(num2)
 
-        # Преобразуем целые числа в натуральные (их абсолютные значения).
+        # Преобразуем целые числа в натуральные (их абсолютные значения)
         abs_num1 = IntegerOperations.ABS_Z_N(num1)
         abs_num2 = IntegerOperations.ABS_Z_N(num2)
 
-        if poz_num1 != poz_num2:  # Если числа с разными знаками.
-            # Складываем модули чисел (их абсолютные значения).
+        if poz_num1 != poz_num2:  # Если числа с разными знаками
+            # Складываем модули чисел
             result_abs = NaturalOperations.ADD_NN_N(abs_num1, abs_num2)
 
-            # Если первое число отрицательное, результат будет с минусом.
+            # Знак результата зависит от знака первого числа
             if poz_num1 == 1:
                 result = IntegerOperations.MUL_ZM_Z(Integer(str(result_abs)))
             else:
                 result = Integer(str(result_abs))
-        else:  # Если числа с одинаковыми знаками.
-            # Сравниваем их абсолютные значения.
+        else:  # Если числа с одинаковыми знаками
+            # Сравниваем их абсолютные значения
             comparison = NaturalOperations.COM_NN_D(abs_num1, abs_num2)
-            if comparison == 2:  # abs_num1 >= abs_num2
-                result_abs = NaturalOperations.SUB_NN_N(abs_num1, abs_num2)  # Вычитаем меньшее из большего.
-                if poz_num1 == 1:  # Если оба числа отрицательные, результат тоже отрицателен.
+            
+            if comparison == 2:  # |num1| > |num2|
+                result_abs = NaturalOperations.SUB_NN_N(abs_num1, abs_num2)
+                if poz_num1 == 1:  # Если оба отрицательные
                     result = IntegerOperations.MUL_ZM_Z(Integer(str(result_abs)))
                 else:
                     result = Integer(str(result_abs))
-            else:  # abs_num1 < abs_num2
-                result_abs = NaturalOperations.SUB_NN_N(abs_num2, abs_num1)  # Вычитаем меньший модуль из большего.
-                if poz_num1 == 0:  # Если первое число положительное, результат будет отрицательным.
-                    result = IntegerOperations.MUL_ZM_Z(Integer(str(result_abs)))
-                else:
+            else:  # |num1| ≤ |num2|
+                result_abs = NaturalOperations.SUB_NN_N(abs_num2, abs_num1)
+                # Ключевое изменение: всегда делаем результат отрицательным при вычитании большего из меньшего
+                if poz_num1 == 1:  # Если оба отрицательные
                     result = Integer(str(result_abs))
+                else:  # Если оба положительные
+                    result = IntegerOperations.MUL_ZM_Z(Integer(str(result_abs)))
 
-        return result  # Возвращаем результат вычитания.
+        return result
 
     # Z-8 Разработчик: Березовский.М
     @staticmethod
@@ -165,6 +168,7 @@ class IntegerOperations:
         # Определяем знак каждого числа.
         poz_num1 = IntegerOperations.POZ_Z_D(num1)  # Знак первого числа.
         poz_num2 = IntegerOperations.POZ_Z_D(num2)  # Знак второго числа.
+
 
         # Умножаем абсолютные значения чисел.
         abs_num1 = IntegerOperations.ABS_Z_N(num1)
@@ -211,6 +215,7 @@ class IntegerOperations:
         return quotient  # Возвращаем результат деления.
 
     # Z-10 Разработчик: Глебова.В
+    @staticmethod
     @staticmethod
     def MOD_ZZ_Z(num1: Integer, num2: Integer) -> Integer:
         """
